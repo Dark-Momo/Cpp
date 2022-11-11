@@ -1,0 +1,19 @@
+1. Write a high resolution timer. See if you can make it cross platform (QueryPerformanceCounter is the thing to Google on Windows). Use it for testing performance on your other projects.
+
+2. Write your own container class and test its performance. Can you beat std::vector? (protip: no). How about std::set? (Sometimes!)
+
+3. Implement your own shared pointer class. An excellent exercise in proper template use. Can you get it down to a single heap hit per item?
+
+4. Figure out how to include an external library in your project. Allegro is a good one for making entertaining toys. Qt is a great one to get working but is quite difficult to set up.
+
+5. Write your own mini GUI library (use something like Allegro for the graphics and IO). This is a great application for polymorphism and even multiple inheritance.
+
+6. Write a tiny game engine (Allegro or SDL) and play an animation. I used to like filling the screen with dozens of bouncing balls, all colliding with each other. Measure the frame rate. Figure out how to peg the frame rate to 30 fps, and do it without maxing out the CPU (look up how to sleep, don't use busy waiting).
+
+7. Implement a framework for saving and loading objects on disk. Try getting both an ASCII and a binary mode working.
+
+8. Write some parsing tools on top of std::string. Have your program tokenize itself. C++'s built-in string parsing is pretty basic, so this is a handy thing to have around anyway.
+
+9. Learn how to make your code into a DLL/dylib/so. Try to get it working when linked with a program using a different compiler. Very powerful, but plenty of gotchas here. Many surprising or puzzling C++ practices make sense once you learn the DLL rules.
+
+10. Write a quine: http://en.m.wikipedia.org/wiki/Quine_%28computing%29
