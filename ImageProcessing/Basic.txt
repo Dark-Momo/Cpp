@@ -1,1 +1,19 @@
-Here are some basic knowledge about image.
+1. The link below is the DIP official website, which contains a lot of information.
+https://www.imageprocessingplace.com/root_files_V3/students/students.htm
+
+2. Basic knowledge about image.
+
+2.1 RAW
+RAW files are image files that contain uncompressed and unprocessed image data, allowing you to capture practically every 
+detail seen from the camera image sensor. It thus requires more memory storage than JPEG, PNG, BMP, and TIFF files.
+
+They are not yet processed and therefore are not ready to be printed, viewed or edited with a bitmap graphics editor.
+
+2.2 TIFF
+It is one kind of raw image.
+
+Its first 2 bytes indicate the byte order of the image data:
+0x49 0x49 indicate Little-Endian, and 0x4D 0x4D indicate Big-Endian.
+
+The following 2 bytes are 0x002A for Little-Endian. If you view the data in hex format, it is "2A 00".
+
