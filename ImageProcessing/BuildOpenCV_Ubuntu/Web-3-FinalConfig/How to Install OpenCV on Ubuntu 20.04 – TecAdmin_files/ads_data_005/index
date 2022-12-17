@@ -1,0 +1,47 @@
+
+var ftGUID_6409782="5463B9BAB51F25";
+var ftConfID_6409782="27704750";
+var ftParams_6409782="ft_custom=7193372_27592196_333481673&ftOBA=1&ft_domain=tecadmin.net&ft_ifb=1&ft_agentEnv=0&ft_referrer=https%3A%2F%2Ftecadmin.net%2F&us_privacy=${US_PRIVACY}&cachebuster=646599.4267896798";
+var ftKeyword_6409782="";
+var ftCustom_6409782="7193372_27592196_333481673";
+var ftSection_6409782="";
+var ftSegment_6409782="";
+var ftSegmentList_6409782=[];
+var ftRuleMatch_6409782="0";
+var ftTimestamp_6409782="1671166101";
+var ftGeoC2_6409782="us";
+var ftGeoState_6409782="ma";
+var ftGeoCity_6409782="belmont";
+var ftISP_6409782="verizon business";
+var ftSpeed_6409782="broadband";
+var ftDMA_6409782="506";
+var ftLong_6409782="-71.18";
+var ftLat_6409782="42.39";
+var ftPostal_6409782="02478";
+var ftTimeZone_6409782="-500";
+var ftMobileCarrier_6409782="";
+var ftImp6409782 = {};
+ftImp6409782.privacy = "x";
+ftImp6409782.guidAge = "-1";
+ftImp6409782.impID = "4C62A873-6B4F-F6E2-2D50-5CEBDED8F46A";
+ftImp6409782.duid = "FT:5463B9BAB51F25";
+ftImp6409782.ft_tpplid = "";
+ftImp6409782.ft_c = {};
+ftImp6409782.gdpr = "";
+ftImp6409782.gdpr_consent = "";
+ftImp6409782.gdpr_pd = "";
+ftImp6409782.oob_consent = "";
+ftImp6409782.gdprStoredConsent = "";
+ftImp6409782.us_privacy = "!!US_PRIVACY!";
+
+ftImp6409782.jsAppend = "1";
+(function(){
+    var tag = document.getElementById('ft_servedby_6409782') || (function(s){
+    	return s[s.length-1];
+    }(document.getElementsByTagName('script'))),
+           js = document.createElement('script');
+    js.src =
+"https://cdn.flashtalking.com/xre/640/6409782/3923299/js/j-6409782-3923299.js";
+    js.id = "ftscript_m6409782";
+    tag.parentNode.insertBefore(js, tag);
+}());

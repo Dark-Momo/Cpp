@@ -1,0 +1,9 @@
+If using 'code --disable-gpu' can start VsCode 1.74.x normally, then
+1. Go to '/usr/share/applications/code.desktop', add parameter '--disable-gpu' to the 2 lines of 'Exec='. Chmod to 777;
+2. Use 'code --disable-gpu' to start the VsCode and then
+(1). Open command pallete (Ctrl + Shift + P)
+(2). Enter "Preferences: Configure Runtime Arguments"
+(3). Add config: "disable-hardware-acceleration": true
+     Don't forget to add , to original last line;
+(4). Restart VS Code
+
