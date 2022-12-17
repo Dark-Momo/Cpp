@@ -1,5 +1,6 @@
 # Debug Folder
 #*/*/Debug/
+.DS_Store
 
 # .vs Folder
 #*/*/.vs/
