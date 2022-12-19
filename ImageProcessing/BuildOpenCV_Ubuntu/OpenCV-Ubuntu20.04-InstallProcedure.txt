@@ -95,7 +95,3 @@ Solution:
 Now, the example code compiles and runs correctly.
 
 OpenCV 'include' and 'lib' are all under /usr/local.
-
-
-
-
