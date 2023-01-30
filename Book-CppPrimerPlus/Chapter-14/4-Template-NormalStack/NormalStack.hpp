@@ -15,15 +15,15 @@ private:
 public:
     NormalStack();
     bool isEmpty() const;
-    bool inFull() const;
+    bool isFull() const;
 
-    Type & top() const;             // Return 'Type' or 'Type &'?
+    Type getTop(); // No const at end since it will modify 'top'.
 
-    bool push(const Type & source); // What if clear source after push()?
+    bool push(const Type & source);
 
-    Type & pop();                   // What if clear the stack element after pop it?
+    Type pop();
     bool pop(Type & target);
-}
+};
 
 // Declaration and Definition should be in the same file for template.
 template <typename Type>
@@ -32,33 +32,37 @@ NormalStack<Type>:: NormalStack()
     top = 0;
 }
 
+template <typename Type>
 bool NormalStack<Type>::isEmpty() const
 {
     return top == 0;
 }
 
+template <typename Type>
 bool NormalStack<Type>::isFull() const
 {
     return top == STACKSIZE; // Stack size goes to max of [STACKSIZE - 1].
 }
 
-Type & NormalStack<Type>::top()
+// --------------------------------------------------------------------------
+// Example of bad design here!
+template <typename Type>
+Type NormalStack<Type>::getTop() // No const here since it modify top.
 {
-    if (!isEmpty())
-    {
-        top--;
-	return items[top];
-    }
-    else
-    {
-        std::cout << "Stack top() failed since it is empty! Return -1...\n";
-        return -1;
-    }
+    Type val;
+    top--;
+    val = items[top];
+    top++;
+    return val;
 }
+// Here, we didn't check isEmpty(). Otherwise, one problem will come up:
+// What should we return if isEmpty()? -1? (Type)(-1)? Or what? 
+// --------------------------------------------------------------------------
 
+template <typename Type>
 bool NormalStack<Type>::push(const Type & source)
 {
-    if (!isFull)
+    if (!isFull())
     {
         items[top] = source;
         top++;
@@ -70,20 +74,14 @@ bool NormalStack<Type>::push(const Type & source)
     }
 }
 
-Type & NormalStack<Type>::pop()
+template <typename Type>
+Type NormalStack<Type>::pop()
 {
-    if (!isEmpty)
-    {
-	top--;
-        return items[top]
-    }
-    else
-    {
-        std::cout << "Stack pop() failed since it is empty! Return -1...\n";
-	return -1;
-    }
+    top--; // Moce top to current 'tip' position that has valid data.
+    return items[top];
 }
 
+template <typename Type>
 bool NormalStack<Type>::pop(Type & target)
 {
     if (!isEmpty())
