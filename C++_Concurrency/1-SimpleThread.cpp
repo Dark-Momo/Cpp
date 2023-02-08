@@ -21,6 +21,10 @@ void threadPassByPointer(std::string * str)
     *str = "mnq";
 }
 
+void threadPassByMove(std::string && str)
+{
+    std::cout << "Called by function using Move : " << str << std::endl;
+}
 
 int main(void)
 {
@@ -71,6 +75,12 @@ int main(void)
     th_pointer.join();
     std::cout << "After from thread by pointer, s is : " << s << std::endl;   // Modified to 'mnq'
 
+    // 4. Pass by std::move for the argument of thread.
+    std::cout << "-----------------------------------------------------------\n";
+    std::thread th_move{threadPassByMove, std::move(s)}; // Output : Called by function using Move : mnq
+    th_move.join();
+    std::cout << "After from thread by move, s is : " << s << std::endl; // Output : After from thread by move, s is :
+                                                                         // s lost its data because of std::move().
     return 0;
 }
 
