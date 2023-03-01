@@ -1,0 +1,14 @@
+1. A try block must have a least one catch block following it;
+
+2. The parameters of catch() block can be passed by value if it is basic type; otherwise, const reference would 
+   be preferred to avoid data copy;
+
+3. Catch would not do type conversion to its parameter, in order to get correct exeception handling, except that 
+   the derived -> base class object;
+
+4. Once the execution flow gets into catch, it is considered to be handled. And the remaining code in try block
+    after throw will not be executed.
+
+5. Try block can detect an exception thrown by a function that is called from within the try block. The throw 
+   statements do NOT have to be placed directly inside a try block. Instead, exceptions can be thrown from anywhere 
+   in a function, and those exceptions can be caught by the try block of the caller (or the caller’s caller, etc…);
