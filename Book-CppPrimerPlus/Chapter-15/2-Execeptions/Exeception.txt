@@ -1,4 +1,7 @@
-1. A try block must have a least one catch block following it;
+1. A try block must have a least one catch block following it. When no exception handler for a function can be 
+   found, std::terminate() is called, and the application is terminated. The operating system will generally 
+   notify you that an unhandled exception error has occurred. How it does this depends on the operating system, 
+   but possibilities include printing an error message, popping up an error dialog, or simply crashing.
 
 2. The parameters of catch() block can be passed by value if it is basic type; otherwise, const reference would 
    be preferred to avoid data copy;
@@ -12,3 +15,16 @@
 5. Try block can detect an exception thrown by a function that is called from within the try block. The throw 
    statements do NOT have to be placed directly inside a try block. Instead, exceptions can be thrown from anywhere 
    in a function, and those exceptions can be caught by the try block of the caller (or the caller’s caller, etc…);
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+When there is no catch() for a exeception, the stack is usually not unwinded, which means we preserve that information, 
+making it easier to determine how an unhandled exception was thrown, and fix it. But the program will be terminated then.
+
+When there is a catch(), the stack will be unwound in an orderly manner (ensuring destruction of local variables). 
+This will also prevent the program from terminating immediately, giving us a chance to print an error of our choosing 
+and save the user’s state before exiting.
+
+The downside of this approach is that if an unhandled exception does occur, stack unwinding will occur, making it harder 
+to determine why the unhandled exception was thrown in the first place. For this reason, using a catch-all handler in 
+main is often a good idea for production applications, but disabled (using conditional compilation directives) in debug builds.

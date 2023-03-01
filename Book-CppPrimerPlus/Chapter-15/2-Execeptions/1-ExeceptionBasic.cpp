@@ -32,6 +32,7 @@ double mySqrt(int x)
 
 int main()
 {
+    std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "1. Basic try-catch block...\n";
     try
     {
@@ -49,10 +50,9 @@ int main()
         std::cerr << "We catched a 'double' thrown of " << x << "\n";
     } 
 
-    std::cout << "Get out from 1st try-catch blocks...\n\n";
-
-    int x;
+    std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "2. Input a valut for square-root operation : ";
+    int x;
     std::cin >> x;
     try
     {
@@ -67,6 +67,7 @@ int main()
         std::cout << "Error : " << str << "\n";
     }
 
+    std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "3. Input a value for mySqrt() operation : ";
     int m;
     std::cin >> m;
@@ -81,6 +82,7 @@ int main()
         std::cerr << "Catch of mySqrt() : " << str << "\n";
     }
 
+    std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "4. Unhandled exeception example mySqrt(-5) below...\n ";
     std::cout << "The sqrt of -5 is " << mySqrt(-5) << '\n';
     // Output:
