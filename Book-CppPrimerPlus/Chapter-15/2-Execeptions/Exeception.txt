@@ -16,6 +16,42 @@
    statements do NOT have to be placed directly inside a try block. Instead, exceptions can be thrown from anywhere 
    in a function, and those exceptions can be caught by the try block of the caller (or the caller’s caller, etc…);
 
+6. What about a class's constructor and destructor?
+   If a constructor fails in progress, we can throw an exeception to indicate a failure. In such a case, the object’s 
+   construction is aborted, and all class members (which have already been created and initialized prior to the body 
+   of the constructor executing) are destructed as per usual.
+   
+   But since the class object hasn't been set up, the destructor will not be called to cleanup. What should we do?
+   (1) Rethrowing exceptions - Wrap any code that can fail in a try block, use a corresponding catch block to catch 
+       the exception and do any necessary cleanup, and then rethrow the exception;
+
+   (2) Do the resource allocations in a members of the class (rather than in the constructor itself), then those 
+       members can clean up after themselves when they are destructed;
+       
+       Here we have an example : Class A has a throw in its ctor; In main(), we construct a A object in a try{} - catch{}.
+       When the constructor in main() has error, throwing an exeception, we found its member, another class B, has its 
+       contrcutor - destructor called in order.
+
+   (3) Use smart pointer. So it can manage resource itself when throw happens;
+
+7. When throwing a exeception class, it is better to use reference to catch it. Using value or pointer is not a good idea.
+
+8. Inheritace
+   You can design a class of your own, and throw it when exeception happens. And you can also derived any class from it, and
+   throw the derived class. The catch() here can do type cast to make derived class be acceptable to catch() taking base 
+   class as input.
+   
+   This is the idea behind std::exeception. std::exeception is a base class, and C++ 20 has about 28 derived class that you
+   can throw when exeception happens, and they are from std::exeception. 
+ 
+   std::exception is a small interface class designed to serve as a base class to any exception thrown by the C++ standard 
+   library. NOTHING THROW A STD::EXECEPTION ITSELF, AND SO DO YOU. std::exception has a virtual member function named what() that 
+   returns a C-style string description of the exception. Most derived classes override the what() function to change the message.  
+   
+   Examples of 28 execeptions that are derived from std::exeception:
+   (1) std::length_error();
+   (2) std::runtime_error();
+
 --------------------------------------------------------------------------------------------------------------------------------
 
 When there is no catch() for a exeception, the stack is usually not unwinded, which means we preserve that information, 
