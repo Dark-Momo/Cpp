@@ -1,66 +1,110 @@
-1. A try block must have a least one catch block following it. When no exception handler for a function can be 
-   found, std::terminate() is called, and the application is terminated. The operating system will generally 
-   notify you that an unhandled exception error has occurred. How it does this depends on the operating system, 
-   but possibilities include printing an error message, popping up an error dialog, or simply crashing.
+1. A try block must have a least one catch block following it. When no exception handler for a function can be found, 
+   std::terminate() is called, and the application is terminated. The operating system will generally notify you that an unhandled 
+   exception error has occurred. How it does this depends on the operating system, but possibilities include printing an error message, 
+   popping up an error dialog, or simply crashing.
 
-2. The parameters of catch() block can be passed by value if it is basic type; otherwise, const reference would 
-   be preferred to avoid data copy;
+2. The parameters of catch() block can be passed by value if it is basic type; otherwise, const reference would be preferred to 
+   avoid data copy;
 
-3. Catch would not do type conversion to its parameter, in order to get correct exeception handling, except that 
-   the derived -> base class object;
+3. Catch would not do type conversion to its parameter, in order to get correct exeception handling, except that the derived -> base 
+   class object;
 
-4. Once the execution flow gets into catch, it is considered to be handled. And the remaining code in try block
-    after throw will not be executed.
+4. Once the execution flow gets into catch, it is considered to be handled. And the remaining code in try block after 
+   throw will not be executed.
 
-5. Try block can detect an exception thrown by a function that is called from within the try block. The throw 
-   statements do NOT have to be placed directly inside a try block. Instead, exceptions can be thrown from anywhere 
-   in a function, and those exceptions can be caught by the try block of the caller (or the caller’s caller, etc…);
+5. Try block can detect an exception thrown by a function that is called from within the try block. The throw statements do NOT have 
+   to be placed directly inside a try block. Instead, exceptions can be thrown from anywhere in a function, and those exceptions can 
+   be caught by the try block of the caller (or the caller’s caller, etc…);
 
 6. What about a class's constructor and destructor?
-   If a constructor fails in progress, we can throw an exeception to indicate a failure. In such a case, the object’s 
-   construction is aborted, and all class members (which have already been created and initialized prior to the body 
-   of the constructor executing) are destructed as per usual.
+   If a constructor fails in progress, we can throw an exeception to indicate a failure. In such a case, the object’s construction 
+   is aborted, and all class members (which have already been created and initialized prior to the body of the constructor executing) 
+   are destructed as per usual.
    
    But since the class object hasn't been set up, the destructor will not be called to cleanup. What should we do?
-   (1) Rethrowing exceptions - Wrap any code that can fail in a try block, use a corresponding catch block to catch 
-       the exception and do any necessary cleanup, and then rethrow the exception;
+   (1) Rethrowing exceptions - Wrap any code that can fail in a try block, use a corresponding catch block to catch the exception and 
+       do any necessary cleanup, and then rethrow the exception;
 
-   (2) Do the resource allocations in a members of the class (rather than in the constructor itself), then those 
-       members can clean up after themselves when they are destructed;
-       
-       Here we have an example : Class A has a throw in its ctor; In main(), we construct a A object in a try{} - catch{}.
-       When the constructor in main() has error, throwing an exeception, we found its member, another class B, has its 
-       contrcutor - destructor called in order.
+   (2) Do the resource allocations in a members of the class (rather than in the constructor itself), then those members can clean up 
+       after themselves when they are destructed;
+     
+       Here we have an example : Class A has a throw in its ctor; In main(), we construct a A object in a try{} - catch{}. When the 
+       constructor in main() has error, throwing an exeception, we found its member, another class B, has its contrcutor - destructor 
+       called in order.
 
    (3) Use smart pointer. So it can manage resource itself when throw happens;
 
 7. When throwing a exeception class, it is better to use reference to catch it. Using value or pointer is not a good idea.
 
 8. Inheritace
-   You can design a class of your own, and throw it when exeception happens. And you can also derived any class from it, and
-   throw the derived class. The catch() here can do type cast to make derived class be acceptable to catch() taking base 
-   class as input.
+   You can design a class of your own, and throw it when exeception happens. And you can also derived any class from it, and throw the 
+   derived class. The catch() here can do type cast to make derived class be acceptable to catch() taking base class as input.
    
-   This is the idea behind std::exeception. std::exeception is a base class, and C++ 20 has about 28 derived class that you
-   can throw when exeception happens, and they are from std::exeception. 
+   This is the idea behind std::exeception. std::exeception is a base class, and C++ 20 has about 28 derived class that you can throw 
+   when exeception happens, and they are from std::exeception. 
  
-   std::exception is a small interface class designed to serve as a base class to any exception thrown by the C++ standard 
-   library. NOTHING THROW A STD::EXECEPTION ITSELF, AND SO DO YOU. std::exception has a virtual member function named what() that 
-   returns a C-style string description of the exception. Most derived classes override the what() function to change the message.  
+   std::exception is a small interface class designed to serve as a base class to any exception thrown by the C++ standard library. 
+   NOTHING THROW A STD::EXECEPTION ITSELF, AND SO DO YOU. std::exception has a virtual member function named what() that returns a C-style 
+   string description of the exception. Most derived classes override the what() function to change the message.  
    
    Examples of 28 execeptions that are derived from std::exeception:
    (1) std::length_error();
    (2) std::runtime_error();
 
+9. Re-Throw an Exeception with exception in Derived-Base form
+   Occasionally you may run into a case where you want to catch an exception, but not want to (or have the ability to) fully 
+   handle it at the point where you catch it. This is common when you want to log an error, but pass the issue along to the caller 
+   to actually handle.
+
+   It means you will throw an exception in a catch() block, which is supposed to be catched by an upper catch() block.
+
+10. Function try blocks
+    It is used to catch() exceptions when initializing a derived class from a base, using member initialization form. It can
+    catch exceptions from both base and derived itself.
+
+11. Destructors should not throw exceptions. Otherwise, the compiler is put in a situation where it doesn’t know whether to 
+    continue the stack unwinding process or handle the new exception. The end result is that your program will be terminated immediately.
+
+12. Exception has cost when it happens, and very minor cost when not. There is something called Zero-cost exceptions, which has no 
+    cost when it doesn't happen, but with heavier cost when exception happens. 
+
+13. The noexcept specifier
+    In C++, all functions are classified as either non-throwing or potentially throwing. A non-throwing function is one that promises 
+    not to throw exceptions that are visible to the caller. A potentially throwing function may throw exceptions that are visible to the caller.
+
+    To define a function as non-throwing, we can use the noexcept specifier.
+    void doSomething() noexcept;
+
+    Note that noexcept doesn’t actually prevent the function from throwing exceptions or calling other functions that are potentially throwing. 
+    This is allowed so long as the noexcept function catches and handles those exceptions INTERNALLY, and those exceptions do not exit the noexcept 
+    function.
+
+    If an unhandled exception would exit a noexcept function, std::terminate will be called (even if there is an exception handler that would 
+    otherwise handle such an exception somewhere up the stack). And if std::terminate is called from inside a noexcept function, stack unwinding 
+    may or may not occur (depending on implementation and optimizations), which means your objects may or may not be destructed properly prior 
+    to termination.
+
+    The noexcept specifier has an optional Boolean parameter. noexcept(true) is equivalent to noexcept, meaning the function is non-throwing. 
+    noexcept(false) means the function is potentially throwing. These parameters are typically only used in template functions, so that a template 
+    function can be dynamically created as non-throwing or potentially throwing based on some parameterized value.
+
 --------------------------------------------------------------------------------------------------------------------------------
 
-When there is no catch() for a exeception, the stack is usually not unwinded, which means we preserve that information, 
-making it easier to determine how an unhandled exception was thrown, and fix it. But the program will be terminated then.
+Exception handling is best used when all of the following are true:
 
-When there is a catch(), the stack will be unwound in an orderly manner (ensuring destruction of local variables). 
-This will also prevent the program from terminating immediately, giving us a chance to print an error of our choosing 
-and save the user’s state before exiting.
+The error being handled is likely to occur only infrequently.
+The error is serious and execution could not continue otherwise.
+The error cannot be handled at the place where it occurs.
+There isn’t a good alternative way to return an error code back to the caller.
 
-The downside of this approach is that if an unhandled exception does occur, stack unwinding will occur, making it harder 
-to determine why the unhandled exception was thrown in the first place. For this reason, using a catch-all handler in 
-main is often a good idea for production applications, but disabled (using conditional compilation directives) in debug builds.
+--------------------------------------------------------------------------------------------------------------------------------
+
+When there is no catch() for a exeception, the stack is usually not unwinded, which means we preserve that information, making it 
+easier to determine how an unhandled exception was thrown, and fix it. But the program will be terminated then.
+
+When there is a catch(), the stack will be unwound in an orderly manner (ensuring destruction of local variables). This will also prevent 
+the program from terminating immediately, giving us a chance to print an error of our choosing and save the user’s state before exiting.
+
+The downside of this approach is that if an unhandled exception does occur, stack unwinding will occur, making it harder to determine 
+why the unhandled exception was thrown in the first place. For this reason, using a catch-all handler in main is often a good idea for 
+production applications, but disabled (using conditional compilation directives) in debug builds.
