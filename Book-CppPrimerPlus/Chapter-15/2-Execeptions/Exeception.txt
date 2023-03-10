@@ -88,7 +88,21 @@
     noexcept(false) means the function is potentially throwing. These parameters are typically only used in template functions, so that a template 
     function can be dynamically created as non-throwing or potentially throwing based on some parameterized value.
 
---------------------------------------------------------------------------------------------------------------------------------
+    * For your code, there are two places that make sense to use noexcept:
+    (1) On constructors and overloaded assignment operators that are no-throw (to take advantage of optimizations).
+    (2) On functions for which you want to express a no-throw or no-fail guarantee (e.g. to document that they can be safely called from destructors 
+        or other noexcept functions)
+
+    * Best practice
+      Make constructors and overloaded assignment operators noexcept when you can. Use noexcept on other functions to express a no-fail or no-throw guarantee.
+
+14. No throw / No fail -- The function will always succeed (no-fail) or fail without throwing an exception (no-throw).
+    The no-throw guarantee: if a function fails, then it won’t throw an exception. Instead, it will return an error code or ignore the problem. 
+    No-throw guarantees are required during stack unwinding when an exception is already being handled; for example, all destructors should have a no-throw 
+    guarantee (as should any functions those destructors call). Examples of code that should be no-throw:
+    (1) destructors and memory deallocation/cleanup functions
+    (2) functions that higher-level no-throw functions need to call
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Exception handling is best used when all of the following are true:
 
@@ -97,7 +111,7 @@ The error is serious and execution could not continue otherwise.
 The error cannot be handled at the place where it occurs.
 There isn’t a good alternative way to return an error code back to the caller.
 
---------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 When there is no catch() for a exeception, the stack is usually not unwinded, which means we preserve that information, making it 
 easier to determine how an unhandled exception was thrown, and fix it. But the program will be terminated then.
