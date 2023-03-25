@@ -15,6 +15,8 @@ class AutoPtr
 	{
 	    std::cout << "In Ctor : AutoPtr::AutoPtr(T* ptr)...\n";
 	}
+        // We don't define any copy contructor, or assignment operator here.
+        // So when they are required, default ones will be called, doing shadow copy.
 
 	// Below function is not that useful since after initializing a smart pointer,
 	// AutoPtr<Resource> ptr1(new Resource());

@@ -12,6 +12,8 @@
 //
 // 3. Move operation, which means transfer ownship. We will see it here.  
 
+// Deleting a nullptr is okay, as it does nothing.
+
 template <typename T>
 class AutoPtr
 {
@@ -28,6 +30,29 @@ class AutoPtr
 	    std::cout << "In Ctor : AutoPtr::AutoPtr(T* ptr)...\n";
 	}
 
+	// -------------------------------------------------------------------------
+	// A COPY CONSTRUCTOR THAT IMPLEMENTS MOVE OPERATION!
+	// -------------------------------------------------------------------------
+        AutoPtr(AutoPtr & inst)
+	{
+	    m_ptr = inst.m_ptr; 	// Transfer ownship
+	    inst.m_ptr = nullptr;
+	}
+
+        // -------------------------------------------------------------------------
+        // AN ASSIGNMENT OPERATOR THAT IMPLEMENTS MOVE OPERATION!
+        // -------------------------------------------------------------------------
+	AutoPtr& operator=(AutoPtr & inst)
+	{
+	    if (&inst == this)
+                return *this;
+
+	    delete m_ptr;
+	    m_ptr = inst.m_ptr;
+	    inst.m_ptr = nullptr;
+	    return *this;
+	}
+    
 	// Below function is not that useful since after initializing a smart pointer,
 	// AutoPtr<Resource> ptr1(new Resource());
 	// ptr1 will be a pointer of class Resource type, and it doesn't have a memebr
@@ -45,6 +70,7 @@ class AutoPtr
 
 	T& operator*() const { return *m_ptr; }
 	T* operator->() const { return m_ptr; }
+	bool isNull() const { return m_ptr == nullptr; }
 };
 
 class Resource
@@ -52,27 +78,34 @@ class Resource
     public:
         Resource()
 	{
-	    std::cout << "In Ctor - Resource::Resource()...\n";
+	    std::cout << "Resource Constructed.\n";
 	}
 
 	void showAddr(void)
 	{
-	    std::cout << "In Resource::showAddr() : " << this << "\n";
+	    std::cout << "Resource::showAddr() : " << this << "\n";
 	}
         
 	~Resource()
         {
-            std::cout << "In Dtor - Resource::~Resource()...\n";
+            std::cout << "Resource Destructed.\n";
 	}
 };
 
 int main()
 {
-    AutoPtr<Resource> ptr1(new Resource());
-    ptr1->showAddr();
+    AutoPtr<Resource> res1(new Resource());
+    AutoPtr<Resource> res2; // Start as nullptr
 
-    AutoPtr<Resource> ptr2(ptr1);
-    ptr2->showAddr();
+    std::cout << "res1 is " << (res1.isNull() ? "null\n" : "not null\n");
+    std::cout << "res2 is " << (res2.isNull() ? "null\n" : "not null\n");
+
+    res2 = res1; // res2 assumes ownership, res1 is set to null
+
+    std::cout << "Ownership transferred\n";
+
+    std::cout << "res1 is " << (res1.isNull() ? "null\n" : "not null\n");
+    std::cout << "res2 is " << (res2.isNull() ? "null\n" : "not null\n");
 
     return 0;
 }
