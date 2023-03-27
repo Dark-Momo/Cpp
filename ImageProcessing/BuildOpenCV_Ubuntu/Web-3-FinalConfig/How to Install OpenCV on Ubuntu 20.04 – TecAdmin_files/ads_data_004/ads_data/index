@@ -1,47 +1,0 @@
-
-var ftGUID_6409781="5463105358E408";
-var ftConfID_6409781="27704751";
-var ftParams_6409781="ft_custom=7193372_27592196_333590244&ftOBA=1&ft_agentEnv=0&ft_referrer=https%3A%2F%2Fgoogleads.g.doubleclick.net%2Fpagead%2Fads%3Fclient%3Dca-pub-5619389005962850%26output%3Dhtml%26h%3D280%26slotname%3D1017085322%26adk%3D767402448%26adf%3D1312697991%26pi%3Dt.ma~as.1017085322%26w%3D336%26lmt%3D1671163895%26format%3D336x280%26url%3Dhttps%253A%252F%252Ftecadmin.net%252Fhow-to-install-opencv-on-ubuntu-20-04%252F%26host%3Dca-host-pub-2644536267352236%26wgl%3D1%26dt%3D1671166086763%26bpp%3D1%26bdt%3D1866%26idt%3D832%26shv%3Dr20221207%26mjsv%3Dm202212060101%26ptt%3D9%26saldr%3Daa%26abxe%3D1%26cookie%3DID%253D9ba9200c4ba20e4e-228f9384ded8001d%253AT%253D1670472367%253AS%253DALNI_MYaM0eIGUg3w_ZuWg9y_nwD8nnDYQ%26gpic%3DUID%253D000008c8616a0ef7%253AT%253D1670472367%253ART%253D1670472367%253AS%253DALNI_MY94A9zhImcECrDjrcawf7Q6ErsAg%26prev_fmts%3D0x0%252C728x90%252C336x280%252C300x600%26nras%3D1%26correlator%3D4742385073065%26frm%3D20%26pv%3D1%26ga_vid%3D1509844140.1670472367%26ga_sid%3D1671166088%26ga_hid%3D1853406068%26ga_fc%3D1%26u_tz%3D-300%26u_his%3D3%26u_h%3D984&us_privacy=${US_PRIVACY}&cachebuster=40866.28459480679";
-var ftKeyword_6409781="";
-var ftCustom_6409781="7193372_27592196_333590244";
-var ftSection_6409781="";
-var ftSegment_6409781="";
-var ftSegmentList_6409781=[];
-var ftRuleMatch_6409781="0";
-var ftTimestamp_6409781="1671166101";
-var ftGeoC2_6409781="us";
-var ftGeoState_6409781="ma";
-var ftGeoCity_6409781="belmont";
-var ftISP_6409781="verizon business";
-var ftSpeed_6409781="broadband";
-var ftDMA_6409781="506";
-var ftLong_6409781="-71.18";
-var ftLat_6409781="42.39";
-var ftPostal_6409781="02478";
-var ftTimeZone_6409781="-500";
-var ftMobileCarrier_6409781="";
-var ftImp6409781 = {};
-ftImp6409781.privacy = "x";
-ftImp6409781.guidAge = "-1";
-ftImp6409781.impID = "CF9F2524-B3A7-50A4-D00C-68EE7969D91D";
-ftImp6409781.duid = "FT:5463105358E408";
-ftImp6409781.ft_tpplid = "";
-ftImp6409781.ft_c = {};
-ftImp6409781.gdpr = "";
-ftImp6409781.gdpr_consent = "";
-ftImp6409781.gdpr_pd = "";
-ftImp6409781.oob_consent = "";
-ftImp6409781.gdprStoredConsent = "";
-ftImp6409781.us_privacy = "!!US_PRIVACY!";
-
-ftImp6409781.jsAppend = "1";
-(function(){
-    var tag = document.getElementById('ft_servedby_6409781') || (function(s){
-    	return s[s.length-1];
-    }(document.getElementsByTagName('script'))),
-           js = document.createElement('script');
-    js.src =
-"https://cdn.flashtalking.com/xre/640/6409781/3923300/js/j-6409781-3923300.js";
-    js.id = "ftscript_m6409781";
-    tag.parentNode.insertBefore(js, tag);
-}());
