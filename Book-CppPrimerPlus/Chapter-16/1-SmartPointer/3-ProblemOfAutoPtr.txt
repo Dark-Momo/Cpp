@@ -1,0 +1,19 @@
+std::auto_ptr, introduced in C++98 and removed in C++17, was C++’s first attempt at a standardized smart pointer. std::auto_ptr 
+opted to implement move semantics just like the AutoPtr class, as illustrated in example 1 and 2.
+
+But it has some problems that make itself removed:
+
+1. std::auto_ptr implements move semantics through the copy constructor and assignment operator, passing a std::auto_ptr BY VALUE 
+   to a function will cause your resource to get moved to the function parameter (and be destroyed at the end of the function when 
+   the function parameters go out of scope). Then when you go to access your auto_ptr argument from the caller (not realizing it was 
+   transferred and deleted), you’re suddenly dereferencing a null pointer. Crash!
+
+2. std::auto_ptr always deletes its contents using non-array delete, like:
+   delete m_ptr;
+   This means auto_ptr won’t work correctly with dynamically allocated arrays, because it uses the wrong kind of deallocation. 
+   Worse, it won’t prevent you from passing it a dynamic array, which it will then mismanage, leading to memory leaks.
+
+After all, when we want to copy, or assign a pointer, we mean to copy, not to move/delete the original one. 
+res1 = res2; // We don't want res2 to be moved or deleted here.
+
+
