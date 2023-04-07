@@ -1,3 +1,28 @@
 R-value references have two properties that are useful: 
 1. R-value references extend the lifespan of the object they are initialized with, to the lifespan of the r-value reference (l-value references to const objects can do this too); 
 2. Non-const R-value references allow you to modify the r-value;
+
+int&& rv = 10;// Will create a temp obj holding 10, and then let rv initialized using it.
+              // Here, rv is a R-value variable, it is NOT just a R-Value. So rv is actually a lvalue.
+              // All variable with names are lvalue!
+
+You should almost never return an r-value reference, for the same reason you should almost never return an l-value reference.
+
+R-Value : 5;
+R-Value Reference : The temporary object when assigning 5 to a R-Value Reference Variable;
+R-Value Reference Variable : int && r_ref. Here, r_ref is a R-Value Reference Variable, and actually a L-Value;
+
+Most typically, this r-value will be a literal or temporary value.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Auto_ptr4<Resource> generateResource()
+{
+	Auto_ptr4<Resource> res{new Resource};
+	return res; // this return value will invoke the move constructor
+}
+When variable res is returned by value, it is moved instead of copied, even though res is an l-value. 
+The C++ specification has a special rule that says automatic objects returned from a function by value can be moved even if they are l-values.
+
+Here is a hint : If you =delete the move ctor and move assignment, function like above will give error complaining there is no move ctor, 
+since here move operation is preferred.
+-----------------------------------------------------------------------------------------------------------------------------------------------
