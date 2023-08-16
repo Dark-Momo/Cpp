@@ -1,0 +1,5 @@
+g++ [FileName.cpp] -pthread -std=c++14
+
+1. 1-Simplest-HelloWorld.cpp
+Simplest form of using std::thread to create a new thread running a function. No others are considered.
+main() exit will cause a zoombie thtread.

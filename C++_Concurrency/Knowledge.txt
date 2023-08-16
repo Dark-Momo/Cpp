@@ -1,0 +1,3 @@
+
+std::thread th(FunctionName) will create a new thread and run it immediately.
+The thread function can't be overloaded. So don't use an existing function name.
