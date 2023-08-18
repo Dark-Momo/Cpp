@@ -8,9 +8,10 @@ main() exit will cause std::thread to call std::terminate().
 Use join() to let main() blocking wait for child thread to finish. This will prevent std::thread's destructor
 to call std::terminate().
 
-3. 3-1-Thread-WithLValueArgument.cpp, 3-2-Thread-WithRValueArgument.cpp, 3-3-Thread-WithReferrenceArgument.cpp 
-Demonstrate a simple function as thread, using: 
+3. 3-1-Thread-WithLValueArgument.cpp,     3-2-Thread-WithRValueArgument.cpp, 
+   3-3-Thread-WithReferrenceArgument.cpp, 3-4-Thread-WithPointerArgument.cpp
 
+Demonstrate a simple function as thread, using: 
 (1) LValue as argument.
 -------------------------------------------------------------
 void printString(std::string str)
@@ -38,3 +39,11 @@ std::thread testTh(printString, std::ref(str));
 Q : Why we need std::ref() to get the reference? 
 Because multi-thread are not supposed to directly use data outside its scope. It has the risk of data EOL from 
 outside, while the thread is still using it. So you need to make sure the validality of data.
+
+(4) Pointer as argument
+-------------------------------------------------------------
+void printStringPointer(std::string * str)
+
+std::string str{"Hello Momo"};
+std::thread testTh(printStringPointer, &str);
+-------------------------------------------------------------
