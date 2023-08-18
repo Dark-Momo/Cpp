@@ -2,4 +2,39 @@ g++ [FileName.cpp] -pthread -std=c++14
 
 1. 1-Simplest-HelloWorld.cpp
 Simplest form of using std::thread to create a new thread running a function. No others are considered.
-main() exit will cause a zoombie thtread.
+main() exit will cause std::thread to call std::terminate().
+
+2. 2-SimplestJoin.cpp
+Use join() to let main() blocking wait for child thread to finish. This will prevent std::thread's destructor
+to call std::terminate().
+
+3. 3-1-Thread-WithLValueArgument.cpp, 3-2-Thread-WithRValueArgument.cpp, 3-3-Thread-WithReferrenceArgument.cpp 
+Demonstrate a simple function as thread, using: 
+
+(1) LValue as argument.
+-------------------------------------------------------------
+void printString(std::string str)
+std::thread testTh(printString, "Hello World");
+-------------------------------------------------------------
+
+(2) RValue as argument
+-------------------------------------------------------------
+void printString(std::string && str)
+std::thread testTh(printString, std::move("Hello World"));
+-------------------------------------------------------------
+
+(3) Reference as argument
+-------------------------------------------------------------
+void printString(std::string &str)
+
+std::string str{"Momo"};
+std::thread testTh(printString, std::ref(str));
+-------------------------------------------------------------
+
+(*) When you want to pass reference as argument to a normal function, you can just use the variable name itself as reference. 
+(*) When you want to pass reference as argument to a thread, you need to use std::ref() to get the reference of the string, 
+    not just pass the str itself. If you want to use constant reference, use std::cref().
+
+Q : Why we need std::ref() to get the reference? 
+Because multi-thread are not supposed to directly use data outside its scope. It has the risk of data EOL from 
+outside, while the thread is still using it. So you need to make sure the validality of data.
