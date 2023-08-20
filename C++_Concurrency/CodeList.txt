@@ -47,3 +47,15 @@ void printStringPointer(std::string * str)
 std::string str{"Hello Momo"};
 std::thread testTh(printStringPointer, &str);
 -------------------------------------------------------------
+
+4. 4-Native_Handle.cpp
+Demonstrates what native_handle() will return for a thread before and after join(). 
+
+5. 5-GetID.cpp
+Use threadName.get_id() and std::this_thread::get_id() to get thread ID. Main() is alsoa thread which can use std::this_thread::get_id().
+
+Two active thread will have unique ID, while a active thread may have the same ID as a previous active, but already dead thread.
+
+6. 2-SleepAndThreadID.cpp
+Demonstrate blocking sleep thread.
+

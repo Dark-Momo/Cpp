@@ -4,10 +4,9 @@
 
 void testFunc()
 {
-    std::cout << "----- testFunc() with ID : " << std::this_thread::get_id() << "\n";
-    std::cout << "----- testFunc() : Sleep for 2000ms...\n";
+    std::cout << "testFunc() : Sleep for 2000ms...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    std::cout << "----- testFunc() : Sleep for 2000ms Done...\n";
+    std::cout << "testFunc() : Sleep for 2000ms Done...\n";
     
 }
 
@@ -22,12 +21,9 @@ using namespace std::chrono_literals;
 
 int main()
 {
-    std::cout << "It is in main() with ID : " << std::this_thread::get_id() << "\n";
     std::cout << "First create the thread.\n";
     
     std::thread th{testFunc};
-    std::cout << "In main(), created thread ID is : " << th.get_id() << "\n";
-    // th.join();
 
     std::cout << "Let main() sleep for 1000ms now...\n";
     // std::this_thread::sleep_for(1000ms);					// OK
@@ -39,9 +35,6 @@ int main()
     std::cout << "Main() finished sleeping for 1000ms now...\n";
 
     th.join(); // Flow will be blocked at where join() is.
-    std::cout << "In main(), after join(), created thread ID is : " << th.get_id() << "\n";
+    std::cout << "In main(), after join().\n";
     return 0;
-
-
-
 }

@@ -1,3 +1,15 @@
+1. std::thread th(FunctionName) will create a new thread and run it immediately. The thread function can't be overloaded. 
+   So don't use an existing function name.
 
-std::thread th(FunctionName) will create a new thread and run it immediately.
-The thread function can't be overloaded. So don't use an existing function name.
+2. std::ref() and its purpose in CodeList.txt.
+
+3. std::thread is C++ interface for multithreading, but it doesn't implement all necessary functions for multithreading 
+   because we want a implementation portable to all platforms, and some platforms are limited.
+   
+   One function that C++ std::thread doesn't provide is setting the priority of thread.
+
+   Thread affinity is to assign a thread on a specific core or not. Usually scheduler will move a thread on different core
+   if it think necessary. But this move would involve context switch.
+
+   native_handle() member function is something that the thread implementation would use to associate with the std::thread.
+   It returns different value, and has different meaning for different platforms. See code example and CodeList.txt for this.  
