@@ -28,7 +28,7 @@ int main()
     std::cout << "Let main() sleep for 1000ms now...\n";
     // std::this_thread::sleep_for(1000ms);					// OK
     // std::this_thread::sleep_for(std::literals::chrono_literals::1000ms);	// No!
-    // std::this_thread::sleep_for(std::chrono_literals::1000ms);		//No!
+    // std::this_thread::sleep_for(std::chrono_literals::1000ms);		// No!
     
     // std::this_thread::sleep_for(std::chrono_literals::milliseconds(1000));  	// No!
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));		// OK

@@ -59,3 +59,6 @@ Two active thread will have unique ID, while a active thread may have the same I
 6. 2-SleepAndThreadID.cpp
 Demonstrate blocking sleep thread.
 
+7. 7-1-ThreadAsFunctionArgument.cpp
+When passing thread as a function argument, it can only be done with std::move(). Don't do it with value passing.
+Thread always start to run when it is created, passing it to a function doesn't influence it.

@@ -12,4 +12,8 @@
    if it think necessary. But this move would involve context switch.
 
    native_handle() member function is something that the thread implementation would use to associate with the std::thread.
-   It returns different value, and has different meaning for different platforms. See code example and CodeList.txt for this.  
+   It returns different value, and has different meaning for different platforms. See code example and CodeList.txt for this.
+
+4. std::thread is implemented using RAII. What does this mean?
+   When passing thread as a function argument, it can only be done with std::move(). Don't do it with value passing.
+
