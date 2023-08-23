@@ -52,13 +52,20 @@ std::thread testTh(printStringPointer, &str);
 Demonstrates what native_handle() will return for a thread before and after join(). 
 
 5. 5-GetID.cpp
-Use threadName.get_id() and std::this_thread::get_id() to get thread ID. Main() is alsoa thread which can use std::this_thread::get_id().
+Use threadName.get_id() and std::this_thread::get_id() to get thread ID. Main() is also a thread which can use std::this_thread::get_id().
 
 Two active thread will have unique ID, while a active thread may have the same ID as a previous active, but already dead thread.
 
 6. 2-SleepAndThreadID.cpp
 Demonstrate blocking sleep thread.
 
-7. 7-1-ThreadAsFunctionArgument.cpp
-When passing thread as a function argument, it can only be done with std::move(). Don't do it with value passing.
-Thread always start to run when it is created, passing it to a function doesn't influence it.
+7. 7-1-ThreadAsFunctionArgument.cpp, 7-2-ThreadAsFunctionReturn.cpp
+(1) When passing thread as a function argument, it can only be done with std::move(). Don't do it with value passing.
+    Thread always start to run when it is created, passing it to a function doesn't influence it.
+
+(2) When you want to return a thread as function return value, compiler will always do std::move() to it.
+
+8. 8-ThreadWithExeception.cpp
+A thread's exception should be handled in the thread itself. Other thread, incluing its parent, can't handle for it.
+If no suitable handler is found, the whole program will be terminated.
+

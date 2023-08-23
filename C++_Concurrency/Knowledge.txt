@@ -16,4 +16,8 @@
 
 4. std::thread is implemented using RAII. What does this mean?
    When passing thread as a function argument, it can only be done with std::move(). Don't do it with value passing.
+   When returning a thread, compiler will always do std::move() to it.
 
+5. A thread's exception should be handled in the thread itself. Other thread, incluing its parent, can't handle for it.
+   If no suitable handler is found, the whole program will be terminated.
+ 
