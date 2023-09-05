@@ -8,7 +8,9 @@ void HelloWorld()
 
 int main()
 {
+    // Solution-1
     std::thread th{HelloWorld};
+    
     try
     {
 	// std::thread th{HelloWorld};
@@ -27,11 +29,13 @@ int main()
 	
 	/* join_1 */
 	th.join();
+	// This join() deals with cases that no throw() is before it.
     }
-    catch(std::exception & e) // This catch will not be executed.
+    catch(std::exception & e)
     {
 	std::cout << "In main() - Catch : Exception caught : " << e.what() << "\n";
-        /* join_2 */
+
+	/* join_2 */
         th.join();
 
     }

@@ -65,7 +65,11 @@ Demonstrate blocking sleep thread.
 
 (2) When you want to return a thread as function return value, compiler will always do std::move() to it.
 
-8. 8-1-Thread-ChildWithExeception.cpp, 8-2-Thread-ParentWithExeception.cpp
+8. 8-1-Thread-ChildWithExeception.cpp, 8-2-Thread-ParentWithExeception.cpp, 8-3-ThreadWithExeception-RAII.cpp
 A thread's exception should be handled in the thread itself. Other thread, incluing its parent, can't handle for it.
 If no suitable handler is found, the whole program will be terminated.
+
+Safe ways to handle thread object in try-catch are:
+(1) The thread itself is out of the try-catch, as shown in 8-2-Thread-ParentWithExeception.cpp;
+(2) RAII, using a class to encapsulate the thread object, as shown in 8-3-ThreadWithExeception-RAII.cpp; 
 
