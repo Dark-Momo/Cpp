@@ -21,3 +21,12 @@
 5. A thread's exception should be handled in the thread itself. Other thread, incluing its parent, can't handle for it.
    If no suitable handler is found, the whole program will be terminated.
  
+6. std::thread doesn't support kill to it. You may rely on OS to kill it.
+
+7. Data Race
+   When several threads are accessing the same memory location and one of the thread is trying to modify it, this modification
+   may be interrupted by other threads, due to lack of synchonization, before it is done. So the data is corrupted here.
+   
+   We may enforce a sequential access to this shared data between threads, and threads will still run concurrently at other 
+   time.
+
