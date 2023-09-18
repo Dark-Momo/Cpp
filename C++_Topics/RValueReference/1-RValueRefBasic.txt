@@ -26,3 +26,5 @@ The C++ specification has a special rule that says automatic objects returned fr
 Here is a hint : If you =delete the move ctor and move assignment, function like above will give error complaining there is no move ctor, 
 since here move operation is preferred.
 -----------------------------------------------------------------------------------------------------------------------------------------------
+
+std::move converts l-value variable  into a r-value.
