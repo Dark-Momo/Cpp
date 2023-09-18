@@ -23,6 +23,7 @@
  
 6. std::thread doesn't support kill to it. You may rely on OS to kill it.
 
+-------------------------------------------------------------------------------------------------------------------------------
 7. Data Race
    When several threads are accessing the same memory location and one of the thread is trying to modify it, this modification
    may be interrupted by other threads, due to lack of synchonization, before it is done. So the data is corrupted here.
@@ -30,3 +31,15 @@
    We may enforce a sequential access to this shared data between threads, and threads will still run concurrently at other 
    time.
 
+   Critical section is the code section that requires execution thread by thread. Usually it is where shared data is. 
+
+8. Thread synchronization, by Mutex, is the solution to data race.
+   std::mutex is a class, with 3 member functions only: 
+   (1) lock()     : Locks the mutex, blocks if the mutex is not available. Block until succeed.
+       Potential danger that if it keeps failing lock, the thread will keeps running forever.  
+   (2) try_lock() : Tries to lock the mutex, returns if the mutex is not available;  
+   (3) unlock()   : Unlocks the mutex;
+
+   But std::mutex is not usaully directly manipulated using these 3 functions. It is more commonly operated by std::unique_lock, 
+   std::lock_guard, or std::scoped_lock (since C++17) manage locking in a more exception-safe manner.
+   
