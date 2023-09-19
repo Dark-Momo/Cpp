@@ -10,6 +10,10 @@ void printString(std::string str)
     {
 	// Only gurantees that line itself doesn't interleave.
 	// The order of lines may still get mixed.
+	
+	// We have a mutex class object here. It is independent from any thread.
+	// Any thread runs to here will lock it (this mutex object), and unlock it
+	// when leaving.
 	task_mutex.lock();
 	for (int index = 0; index < 16; index++)
 	{
