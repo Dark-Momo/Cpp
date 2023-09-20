@@ -73,3 +73,6 @@ Safe ways to handle thread object in try-catch are:
 (1) The thread itself is out of the try-catch, as shown in 8-2-Thread-ParentWithExeception.cpp;
 (2) RAII, using a class to encapsulate the thread object, as shown in 8-3-ThreadWithExeception-RAII.cpp; 
 
+9. 9-1-ThreadWithMutex.cpp, 9-2-ThreadWith-MultipleCriticalRegion.cpp, 9-3-ThreadWithInternalSyncMutex.cpp
+Demonstrated mutex on single critical region, multiple critical region, and on both reader and writer.
+
