@@ -42,9 +42,15 @@
 
    You can set std::mutex as your class member to protect the access to your class data.
    For this case, we should use mutex to do synchronization for both reader and writer for a critical region.
+   
+   *************************************************************************************************************************
+   std::mutex is not usaully directly manipulated using these 3 functions. 
+   The reason is: If there is any exception throw() between lock() and unlock(), the mutec will never be released, so other
+   threads will be blocked there, waiting for the mutex. So is the main(), which will also be blocked forever. 
+   *************************************************************************************************************************
 
-   std::mutex is not usaully directly manipulated using these 3 functions. It is more commonly operated by std::unique_lock, 
-   std::lock_guard, or std::scoped_lock (since C++17) manage locking in a more exception-safe manner.
+   It is more commonly operated by std::unique_lock, std::lock_guard, or std::scoped_lock (since C++17) manage locking in a 
+   more exception-safe manner.
 
    
    
