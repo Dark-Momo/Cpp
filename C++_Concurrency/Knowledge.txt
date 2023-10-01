@@ -36,7 +36,7 @@
 8. Thread synchronization, by Mutex, is the solution to data race.
    std::mutex is a class, with 3 member functions only: 
    (1) lock()     : Locks the mutex, blocks if the mutex is not available. Block until succeed.
-       Potential danger that if it keeps failing lock, the thread will keeps running forever.  
+       Potential danger that if it keeps failing to lock, the thread will keeps running forever.
    (2) try_lock() : Tries to lock the mutex, returns if the mutex is not available;  
    (3) unlock()   : Unlocks the mutex;
 
@@ -45,12 +45,12 @@
    
    *************************************************************************************************************************
    std::mutex is not usaully directly manipulated using these 3 functions. 
-   The reason is: If there is any exception throw() between lock() and unlock(), the mutec will never be released, so other
-   threads will be blocked there, waiting for the mutex. So is the main(), which will also be blocked forever. 
+   The reason is: If there is any exception throw() between lock() and unlock(), the mutex will never be released, so other
+   threads will be blocked there, waiting for the mutex. So is the main(), which will also be blocked forever.
    *************************************************************************************************************************
 
    It is more commonly operated by std::unique_lock, std::lock_guard, or std::scoped_lock (since C++17) manage locking in a 
-   more exception-safe manner.
-
-   
-   
+   more exception-safe manner. 
+   This is RAII way. Basically, the constructor locks, and their destructor unlocks. And we create these classes on stack.
+   (1) std::lock_guard - It only has constructor, with mutex as parameter, and destructor.
+       std::lock_guard<std::mutex> lockGuard(myMutexObj);
