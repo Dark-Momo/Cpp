@@ -20,7 +20,14 @@ void printString(std::string str)
 	        // With std::lock_guard, exception throw will call its destructor to release
 		// the mutex. So following thread can still acquire this mutex.
 		throw std::exception();
-		// With this throw, critical section is over here.
+		// ----------------------------------------------------------------------------------
+		// Problem of std::lock_guard:
+		// With this throw, critical section is over here. BUT! The mutex is not release
+		// yet. The mutex is locked until the '}' odf the try block.
+		//
+		// We can call a unlock() here, but when we meet "}", it will have a double unlock,
+		// which may crash the program.
+		// ----------------------------------------------------------------------------------
 
 		// Below sleep will only take effect when no throw() statement above.
 		// std::this_thread::sleep_for(std::chrono::milliseconds(1000));

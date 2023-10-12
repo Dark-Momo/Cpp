@@ -52,5 +52,15 @@
    It is more commonly operated by std::unique_lock, std::lock_guard, or std::scoped_lock (since C++17) manage locking in a 
    more exception-safe manner. 
    This is RAII way. Basically, the constructor locks, and their destructor unlocks. And we create these classes on stack.
+   
    (1) std::lock_guard - It only has constructor, with mutex as parameter, and destructor.
        std::lock_guard<std::mutex> lockGuard(myMutexObj);
+   
+   (2) std::unique_lock - Similar to std::lock_guard on the constructor locks, and the destructor unlocks. It also has a
+       specific unlock() function to solve the problem of double unlock() about std::lock_guard, which is shown 
+       in 10-1-RAII-LockGuard.cpp.
+
+       std::unique_lock als has some more features.
+
+    In general, if you want to lock the whole scope, use std::lock_guard, otherwise, like you want to lock inside the scope,
+    or need othere features, use std::unique_lock.
