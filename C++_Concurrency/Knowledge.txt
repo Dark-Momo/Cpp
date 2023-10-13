@@ -64,3 +64,29 @@
 
     In general, if you want to lock the whole scope, use std::lock_guard, otherwise, like you want to lock inside the scope,
     or need othere features, use std::unique_lock.
+
+    std::timed_mutex 
+    (1) It supports delayed lock/unlock operations, such as try_lock_for() and try_lock_until(). Take try_lock_for() as example, 
+        it will keep trying lock() in the specified duration, and return true/false when this duration is over;
+    (2) We can also use std::unique_lock() to wrap a std::timed_mutex.
+        std::unique_lock() also has member function try_lock_for() and try_lock_until(), and they are usable when std::unique_lock()
+        is wrapping a std::timed_mutex, not just std::mutex.
+
+    So 2 ways:
+    std::timed_mutex.try_lock_for()/until(), or, std::unique_lock<std::timed_mutex>.try_lock_for()/until().  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
