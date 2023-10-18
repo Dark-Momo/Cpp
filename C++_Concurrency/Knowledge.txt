@@ -75,9 +75,45 @@
     So 2 ways:
     std::timed_mutex.try_lock_for()/until(), or, std::unique_lock<std::timed_mutex>.try_lock_for()/until().  
 
+9. Read-Writer Lock
+   (1) When there are write or multiple write - need mutex to lock;
+   (2) When there are read and write          - need mutex to lock;
+   (3) When there are only read               - NO need for mutex to lock;
 
+   - Exclusive Lock : No other thread can acquire the lock/enter the critical region;
+     -------------------------------------------------------------------------------------------------
+     std::lock_guard<std::shared_mutex> and std::unique_lock<std::shared_mutex> create EXCLUSIVE lock;
+     -------------------------------------------------------------------------------------------------
 
+   - Shared Lock    : Other threads may acquire the lock and excute the critical region concurrently;
+     --------------------------------------------------------
+     std::shared_lock<std::shared_mutex> creates SHARED lock;
+     --------------------------------------------------------
+     A thread with a shared lock can enter the critical section when there is NO exclusive lock on the same shared_mutex, as described
+     just above, or the shared_mutex is released.
 
+10. Shared Data
+    Shared data has 4 cases:
+    (1) Global variable;
+    (2) Static variable at namespace scope;
+    (3) Static class member;
+    (4) Local variable declared as static (normally in function);
+
+    (1)(2)(3) are initialized when program starts, so there is only one thread then. No data race issue;
+    (4) is initialized when program runs:
+    -------------------------------------------------------------------------------------------------
+        void func()
+        {
+            // Static local variable
+            static std::string str("xyz");
+        }
+    -------------------------------------------------------------------------------------------------
+    What if there are many thread calling this function? 
+    - For Initialization : The first thread will initialize it, and following will take the initialized value from the first thread;
+    - For following use  : Follow the normal rule. There will be data race and we need to take protection.
+
+ 
+     
 
 
 

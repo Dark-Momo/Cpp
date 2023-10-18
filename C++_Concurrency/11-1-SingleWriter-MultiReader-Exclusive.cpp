@@ -16,8 +16,11 @@ void writer(void)
 
 void reader(void)
 {
+    // Set this mutex also for reader
+    // -------------------------------------------------------- 
     std::lock_guard<std::mutex> rLockGuard(rwMutex);
-    // std::cout << "Reader : x = " << x << std::endl;
+    // --------------------------------------------------------
+    std::cout << "Reader : x = " << x << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
@@ -50,4 +53,50 @@ int main(void)
     return 0;
 }
 
+// 1. WITH that reader mutex, output is like:
+/*
+Reader : x = 0
+Reader : x = 0
+Reader : x = 0
+Reader : x = 0
+Reader : x = 1
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+*/
 
+// 2. WITHOUT that reader mutex, output is like:
+/*
+Reader : x = 0
+Reader : x = 0
+Reader : x = 0
+Reader : x = 0
+Reader : x = 1
+Reader : x = 1
+Reader : x = 1
+Reader : x = 2
+Reader : x = Reader : x = 2
+2
+Reader : x = Reader : x = 2
+Reader : x = Reader : x = 22
+Reader : x = 2
+Reader : x = Reader : x = 22
+Reader : x = 2
+Reader : x = 2
+Reader : x = Reader : x = 2
+2
+Reader : x = 2
+Reader : x = Reader : x = 2
+2
+Reader : x = 2
+
+
+Reader : x = 2
+Reader : x = 2
+Reader : x = 2
+2
+*/
