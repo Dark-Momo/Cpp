@@ -6,9 +6,12 @@
 class Singleton
 {
 private:
-    // --------------------------------------------------------
-    // We don't declare a static pointer here even you want it.
-    // --------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // We don't declare a static data merber here even you want it.
+    //
+    // static class members don't have any magical thread-safety properties. 
+    // They are simply global variables with fancy names.
+    // ---------------------------------------------------------------------
     // static Singleton * pSingleton;
 
     // Class constructor is private
@@ -24,6 +27,7 @@ public:
     Singleton & operator=(const Singleton &&) = delete;
 
     // ------------------------------------------------
+    // This can also be a non-member function.
     static Singleton * initialize_Singleton();
     // ------------------------------------------------
 };

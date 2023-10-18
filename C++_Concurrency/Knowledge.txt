@@ -100,6 +100,7 @@
     (4) Local variable declared as static (normally in function);
 
     (1)(2)(3) are initialized when program starts, so there is only one thread then. No data race issue;
+ 
     (4) is initialized when program runs:
     -------------------------------------------------------------------------------------------------
         void func()
@@ -112,12 +113,83 @@
     - For Initialization : The first thread will initialize it, and following will take the initialized value from the first thread;
     - For following use  : Follow the normal rule. There will be data race and we need to take protection.
 
+11. Thread-Local Variable
+    The problem of global, and 'static', variable is that it is shared by different threads, so has data race.
+
+    'thread_local' keyword defines a local copy the (1) global, (2) at namespce scope, (3) data member of class, 
+    or (4) local variables in function.
+
+12. Double-Check Locking
+    All discussion below is about shared variables that need to be initialized/assigned Once in a function. 
  
-     
+    // --------------------------------------------------------------------------------
+    Singleton * Singleton::initialize_Singleton()
+    {
+        // We have data race here since several thread may reach here at the same time.
+        if (pSingleton == nullptr)
+        {
+            pSingleton = new Singleton; // This new will call ctor.
+        }
+        return pSingleton;
+    }
+    // --------------------------------------------------------------------------------
 
+    [Solution 1] Normal Mutex
+    We can add Mutex and lock() before, and unlock() after. It is thread-safe with this mutex lock() and unlock().
+    But we will have performance issue since later thread should not concern about initialization and should not lock().
 
+    [Solution 2] Meyer-Singleton Using Static. We don't declare a static member in class.
 
+    (Semi-Solution 2.5) Double-Check Locking
+    The source of the problem is:
+    ------------------------------------------------
+    if(!pTest)
+    {
+        std::lock_guard<std::mutex> myLock(myMutex);
+        pTest = new Test;
+    }
+    ------------------------------------------------
+    The issue here is:
+    (1) Thread A checks the pTest and it is nullptr;
+    (2) Thread B checks the pTest and it is nullptr;
+    (3) Thread B lock, initialize the pTest, unlock;
+    (4) Thread A still thinks pTest as nullptr, so lock, initialize the pTest, unlock;
 
+    So we have improvement as Doubl-Check Locking
+    ------------------------------------------------
+    if(!pTest)
+    {
+        std::lock_guard<std::mutex> myLock(myMutex);
+        if(!pTest)
+        {
+            pTest = new Test;
+        }
+    }
+    ------------------------------------------------
+    So Step (4) above would be disabled by the second check if(!pTest).
+    
+    BUT THERE IS ANOTHER ISSUE HERE!
+    ------------------------------------------------
+    pTest = new Test;
+    ------------------------------------------------
+    This statement involves 3 steps:
+    (1) Allocate memory;
+    (2) Construct the object;
+    (3) Assign the address to pTest; 
+
+    And (2)(3) could be in reverse order. 
+    If (2) is last, it is possible when you leave it, the pTest has a value, but the content hasn't been constructed.
+    Then a following thread refers to this un-initialized area by the pointer pTest, which itself is good.
+    
+    So the key point is to make "pTest = new Test;" executed in once.
+
+    [Solution 3] std::call-once()
+    It makes sure a function is only called once, by usin a flag; and when it is executed, it is not interrupted.
+
+    [Solution 4] Double-Check Locking with C++17 Compiler or Later
+    C++17 Compiler or Later makes sure that when you have a pointer, it is constructed.
+    So the "BUT THERE IS ANOTHER ISSUE HERE!" doesn't exist anymore.
+    
 
 
 
