@@ -62,6 +62,8 @@
 
        std::unique_lock als has some more features.
 
+       Both std::lock_guard and std::unique_lock are blocking ways.
+
     In general, if you want to lock the whole scope, use std::lock_guard, otherwise, like you want to lock inside the scope,
     or need othere features, use std::unique_lock.
 
@@ -138,7 +140,7 @@
     We can add Mutex and lock() before, and unlock() after. It is thread-safe with this mutex lock() and unlock().
     But we will have performance issue since later thread should not concern about initialization and should not lock().
 
-    [Solution 2] Meyer-Singleton Using Static. We don't declare a static member in class.
+    [Solution 2 - MOST RECOMMENDED] Meyer-Singleton Using Static. We don't declare a static member in class.
 
     (Semi-Solution 2.5) Double-Check Locking
     The source of the problem is:
@@ -183,13 +185,48 @@
     
     So the key point is to make "pTest = new Test;" executed in once.
 
-    [Solution 3] std::call-once()
+    [Solution 3 - SECOND RECOMMENDED] std::call-once()
     It makes sure a function is only called once, by usin a flag; and when it is executed, it is not interrupted.
 
     [Solution 4] Double-Check Locking with C++17 Compiler or Later
     C++17 Compiler or Later makes sure that when you have a pointer, it is constructed.
     So the "BUT THERE IS ANOTHER ISSUE HERE!" doesn't exist anymore.
+
+13. Dead Lock
+
+    An example of dead lock:
+    ------------------------------------------------------------------
+    Thread A locks Mutex1;              Thread B locks Mutex2;
+    Then it tries to lock Mutex2;       Then it tries to lock Mutex1;
+    ------------------------------------------------------------------
+
+    [A simple, illustrative solution]
+    Thread A and B try to lock multiple mutexs in the same order; and the thread succeeds to lock the first one can try
+    to lock the second.
+    ------------------------------------------------------------------
+    Thread A trys to lock Mutex1;              Thread B tries to locks Mutex1;
+    Thread A locks Mutex1;                     Failed;
+    Thread A trys to lock Mutex2;              Failed;
+    Thread A locks Mutex2;                     Failed;
+    Thread A releases all Mutexs;              Thread B locks Mutex1;
+                                               ...
+    ------------------------------------------------------------------
+    In real case, it is hard to figure out and control the order of lock between different threads.
+
+    [Dinning Philosophers Problem]
+    5 philosophers are sitting around a round desk, with 5 plates of food, and 5 fork between the plates.
+    (1) They need 2 forks to be able to eat;
+    (2) Forks must be picked one by one;
+    (3) All the philosophers pick up their left fork at the same time. They wait to pick up their right
+        fork (which is also their neighbour's left fork);
+    (4) A philosopher, who has picked up one fork, will wait for a certain time for the second fork. He will think in this
+        timeout. If he can't get the second fork in this timeout, he will put down his first fork;
+    (5) When finished eating, forks can be put down immediately;
+
+    Philosophers : Threads;
+    Forks        : Mutex;
     
+
 
 
 
