@@ -225,13 +225,4 @@
 
     Philosophers : Threads;
     Forks        : Mutex;
-    
-
-
-
-
-
-
-
-
 
