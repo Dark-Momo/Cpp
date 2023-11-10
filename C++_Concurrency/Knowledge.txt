@@ -226,3 +226,57 @@
     Philosophers : Threads;
     Forks        : Mutex;
 
+    ***********************************************************************
+    DeadLock Solution - Any thread will get ALL mutex at one time, or NONE.
+    ***********************************************************************
+    1. If C++17, or later, is available:
+       ----------------------------------------------------------------
+       std::scoped_lock scopedLck(mutex1, mutex2, ...);
+       ----------------------------------------------------------------
+       This will lock all mutex in the argument list in the order of from left to right;
+       When out of scope and destructor is called, will be unlocked in the reverse order;
+
+    2. If C++17 is not available:
+       (1) Blocking method
+       std::lock(mutex1, mutex2);
+
+       This line will lock both the mutex here in a single operation.
+       But here, we lack of wrapper, like std::lock_guard, std::unique_lock, which take control these 2 mutexs.
+       So in real case, we usually have:
+       ---------------------------------------------------------------
+       std::lock(mutex1, mutex2);
+       std::unique_lock<std::mutex> uniLck_1(mutex1, std::adopt_lock);
+       std::unique_lock<std::mutex> uniLck_2(mutex2, std::adopt_lock);
+       ---------------------------------------------------------------
+       Under this case, we have wrapper, which is unique_lock, who can control their scope.
+
+       Or we can defer to lock the mutex;
+       ---------------------------------------------------------------
+       // Associate each unique_lock with a mutex
+       std::unique_lock<std::mutex> uniLck_1(mutex1, std::defer_lock);
+       std::unique_lock<std::mutex> uniLck_2(mutex2, std::defer_lock);
+       // Lock here
+       std::lock(uniLck_1, uniLck_2);
+       ---------------------------------------------------------------
+
+       std::lock() is a blocking operation, that it will NOT RETURN until it obtain all locks.
+       If one lock is not available, it will block forever.
+
+       (2) Non-blocking method
+       std::try_lock(uniLck_1, uniLck_2);
+       It will return immediately;
+       -- If any lock is not available, it will return the index of that lock;
+       -- Return -1 on success;
+       We need to check its return value.
+
+       DeadLock Aviodance Suggestions:
+       (1) Don't wait for other threads;
+       (2) If your thread already holds a lock, try not to obtain another;
+       (3) If your thread really need multiple motexs, obtain them in a single operation;
+
+
+
+
+
+
+
