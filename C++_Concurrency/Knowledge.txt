@@ -230,9 +230,9 @@
     DeadLock Solution - Any thread will get ALL mutex at one time, or NONE.
     ***********************************************************************
     1. If C++17, or later, is available:
-       ----------------------------------------------------------------
-       std::scoped_lock scopedLck(mutex1, mutex2, ...);
-       ----------------------------------------------------------------
+       ---------------------------------------------------------------------------------------
+       std::scoped_lock scopedLck(mutex1, mutex2, ...); // scoped_lock is introduced in C++17.
+       ---------------------------------------------------------------------------------------
        This will lock all mutex in the argument list in the order of from left to right;
        When out of scope and destructor is called, will be unlocked in the reverse order;
 
@@ -262,6 +262,8 @@
        std::lock() is a blocking operation, that it will NOT RETURN until it obtain all locks.
        If one lock is not available, it will block forever.
 
+       std::lock() has argument of lockable objects, it can be mutex, or lock.
+
        (2) Non-blocking method
        std::try_lock(uniLck_1, uniLck_2);
        It will return immediately;
@@ -274,9 +276,19 @@
        (2) If your thread already holds a lock, try not to obtain another;
        (3) If your thread really need multiple motexs, obtain them in a single operation;
 
+14. Live Lock
+    When deadlock happens, threads are stuck there, inactive;
+    When live lock happens, threads are active, but actually do nothing meaningful. It usually comes from bad avoidance
+    to deadlock.
 
+    Example:
+    [Thread A]                                                [Thread B]
+    (1) Lock mutex1;                                          (1) Lock mutex2;
+    (2) Sleep for a while;                                    (2) Sleep for a while;
+    (3) Try_lock mutex2; if fail, go back to (1);             (3) Try_lock mutex1; if fail, go back to (1);
 
+    These 2 threads will keep running in the while loop, active, but acheieve nothing meaningful.
 
-
-
-
+    Avoidance:
+    (1) Use the way dealing with deadlock - Lock all locks in a operation;
+    (2) Set priority. C++ doesn't support? High priority has more chance to be scheduled to run.
