@@ -61,7 +61,7 @@
    * If Lost Wakeup happens, predicate in Writer has been set to true, so Reader still can know that a notification has been sent.
    * If Spurious Wakeup happens, Reader got a notification, but predicate is false, so it knows this notification is spurious.
 
-
+   See "15-5-ThreadSync-CondiVar-WithPredicate-MultiTh.cpp" for details about wait() with predicate and notify_one().
 
 
 
