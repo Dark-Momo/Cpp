@@ -1,0 +1,72 @@
+1. Thread Synchronization
+   Synchronization between threads can be done using synchronization manager, like a global variable that every thread will check.
+   Here, we will have possible data race since several threads will work on the global variable.
+
+   The keypoint is, EVERY single access to a global variable should be protected by lock, even it is just a checking, like what we 
+   have here in [15-2-ThreadSynchronization-WithLock.cpp - processData()].
+
+   A good way for global variable checking is:
+   -----------------------------------------------------------------------------------------------  
+   std::unique_lock<std::mutex> progress_Lock(progressMutex);
+   while(!progress_updated)
+   {
+       progress_Lock.unlock();
+       std::this_thread::sleep_for(10ms);
+       progress_Lock.lock();
+   }
+
+   // We get here when "progress_updated == true"
+   progress_updated = false;
+   std::cout << "ProgressBar - We received " << dataString.size() << " bytes data." << std::endl;
+
+   progress_Lock.unlock();
+   -----------------------------------------------------------------------------------------------
+
+   The synchronization based on global variables has problems:
+   (1) Too many lock and unlock operations;
+   (2) Too many while() loop;
+   (3) When checking that flag is not ready, the thread goes to sleep. But how long should it sleep?
+
+2. Conditional Variable
+   Assume there are 2 threads, one writer, one reader.
+   Conditional variable is a class defined in <condition_variable>. It has:
+   (1) Member function - wait(), which takes a std::unique_lock as argument. 
+       Reader will call this. wait() will unlock the mutex, and block the reader thread until it receives a notification.
+       It also has variations of wait_for() and wait_until().
+   (2) Memebr function - notify_one(), which scheduler will decide which one to wake up, and not the control of program. 
+       and notify_all().
+       Writer will call this.
+
+   [Lost Wakeup]
+   In order to make wait() - notify_one() pair work, wait() must be able to start before notify_one()/all(). 
+   Otherwise, if notify_one() runs first, then wait() starts, wait() will miss the signal, and wait there forever.
+   
+   [Spurious Wakeup]
+   Some times, wait() will be waked up even though notify_one()/all() is not called. It is possible due to the implementation 
+   of the std::condition_variable.
+
+   -----------------------------------------------------------------------------------------------
+   Solution to Lost Wakeup and Spurious Wakeup - Condition Variable with Predicate.
+   -----------------------------------------------------------------------------------------------
+   Predicate is usually a bool variable. It is initialized to false, and be checked by condition variable when calling wait().
+   When notify_one()/all() is called, predicate is set to true.
+   (1) If it is false, the conditional variable will keep running on wait(); 
+   (2) Otherwise, it will jump to the lines after wait() 
+   It is something like:
+   ------------------------------
+   while (!predicate)
+       wait(std::unique_lock());
+   ------------------------------
+
+   * If Lost Wakeup happens, predicate in Writer has been set to true, so Reader still can know that a notification has been sent.
+   * If Spurious Wakeup happens, Reader got a notification, but predicate is false, so it knows this notification is spurious.
+
+
+
+
+
+
+
+
+
+
