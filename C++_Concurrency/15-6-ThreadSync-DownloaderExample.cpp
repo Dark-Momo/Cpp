@@ -21,9 +21,9 @@ std::string dataString;
 // --------------------------------------------------------------------------------------
 void dataFetch()
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
-	std::this_thread::sleep_for(500ms);
+	std::this_thread::sleep_for(1000ms);
 
 	// 1. Update download data.
 	std::unique_lock<std::mutex> progress_Lock(mutexProgress);
@@ -48,67 +48,58 @@ void dataFetch()
     // Download Completed.
     std::cout << "DataFetch - All data has been download!" << std::endl;
 
+    // ---------------------------------------------------------
     std::unique_lock<std::mutex> complete_Lock(mutexComplete);
     flagComplete = true;
     complete_Lock.unlock();
 
     condiVarComplete.notify_all();
+    // ---------------------------------------------------------
 }
 
-
-
-
-
-
-
-
-// progressBar() should exit when progress_completed is true.
+// progressBar() should exit when flagComplete is true.
 void progressBar()
 {
-    // 1. When progress_updated is not true, we should sleep for a while and then go back to while()
-    // 2. When progress_completed is true, we should exit the whole thread.
     while(true)
     {
-	// We use unique_lock here since we need to explicitly call .unlock().
-	std::unique_lock<std::mutex> progress_Lock(progressMutex);
-        while(!progress_updated)
-	{
-	    progress_Lock.unlock();
-	    std::this_thread::sleep_for(10ms);
-	    progress_Lock.lock();
-	}
+        // 1. Deal with progress
+        std::unique_lock<std::mutex> progress_Lock(mutexProgress);
 
-	// We get here when "progress_updated == true"
-	// Below 'progress_updated' is a shared global variable.
-	progress_updated = false;
-	std::cout << "ProgressBar - We received " << dataString.size() << " bytes data." << std::endl;
-        progress_Lock.unlock();
+	std::cout << "ProgressBar - Wait() on mutexProgress lock, with predicate......" << std::endl;
+        condiVarProgress.wait(progress_Lock, [] {return flagProgress;} );
+	
+	// Wake up means progress_lock got and locked mutexProgress.
+	std::cout << "ProgressBar - Waked up by Progress!" << std::endl;
+        
+	flagProgress = false;
 
-	std::lock_guard<std::mutex> completed_Lock(completeMutex);
-	if (progress_completed)
+	std::cout << "ProgressBar - We have received " << dataString.size() << " bytes data." << std::endl;
+	
+	progress_Lock.unlock();
+
+        // 2. Deal with complete check
+	std::unique_lock<std::mutex> complete_Lock(mutexComplete);
+	// Wait 10ms, then check flagComplete, If false, wait_for() return false.
+        if ( condiVarComplete.wait_for(complete_Lock, 10ms, [] { return flagComplete; }) ) 
+        {
+            std::cout << "ProgressBar - Waked up by download finish!" << std::endl;
+            break;
+        }
+	else
 	{
-	    std::cout << "ProgressBar - We received all expected data. Exit progressBar()." << std::endl;
-	    break;
+	    std::cout << "ProgressBar - Download ongoing..." << std::endl;
 	}
     }
 }
 
 void dataProcess()
 {
-    std::unique_lock<std::mutex> completed_Lock(completeMutex);
-    while(!progress_completed)
-    {
-	completed_Lock.unlock();
-        std::this_thread::sleep_for(10ms);
-	completed_Lock.lock();
-    }
-
-    completed_Lock.unlock();
-    // Above code shows even you just want to check a global variable, you need complicated lock scheme. 
-    // -------------------------------------------------------------------------------------------------
-
-    std::lock_guard<std::mutex> data_Lock(progressMutex);
-    std::cout << "DataProcess - We process all data here : " << dataString << std::endl; 
+    std::unique_lock<std::mutex> complete_Lock(mutexComplete);
+    std::cout << "dataProcess - Wait() on mutexComplete lock, with predicate......" << std::endl;
+    condiVarComplete.wait(complete_Lock, [] { return flagComplete; });
+    std::cout << "dataProcess - Waked up by download finished!" << std::endl;
+    std::cout << "DataProcess - We process all data here : " << dataString << std::endl;
+    // complete_Lock.unlock();
 }
 
 int main(void)
