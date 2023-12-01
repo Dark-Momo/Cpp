@@ -30,9 +30,11 @@
 2. Conditional Variable
    Assume there are 2 threads, one writer, one reader.
    Conditional variable is a class defined in <condition_variable>. It has:
-   (1) Member function - wait(), which takes a std::unique_lock as argument. 
+   (1) Member function - wait(), which takes a std::unique_lock as argument. It is blocking.
        Reader will call this. wait() will unlock the mutex, and block the reader thread until it receives a notification.
-       It also has variations of wait_for() and wait_until().
+
+       It also has variations of wait_for() and wait_until(), which are non-blocking;
+
    (2) Memebr function - notify_one(), which scheduler will decide which one to wake up, and not the control of program. 
        and notify_all().
        Writer will call this.
@@ -62,6 +64,9 @@
    * If Spurious Wakeup happens, Reader got a notification, but predicate is false, so it knows this notification is spurious.
 
    See "15-5-ThreadSync-CondiVar-WithPredicate-MultiTh.cpp" for details about wait() with predicate and notify_one().
+
+   wait() - Blocking;
+   wait_for()/wait_until() - Non-blocking;
 
 
 

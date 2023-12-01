@@ -60,6 +60,8 @@ void Writer(void)
 	// -----------------------------------------------------------------
     }
 
+    // We need to unlock(), in some way, before we notify().
+
     std::cout << "Writer - Going to notify reader" << std::endl;
     conditionVar.notify_one();
 }
