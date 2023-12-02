@@ -68,6 +68,8 @@
    wait() - Blocking;
    wait_for()/wait_until() - Non-blocking;
 
+   Usually, you should set/unset predicate when it is still locked. 
+   See [15-6-ThreadSync-DownloaderExample.cpp].
 
 
 
