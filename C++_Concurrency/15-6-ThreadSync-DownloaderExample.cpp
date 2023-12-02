@@ -23,25 +23,25 @@ void dataFetch()
 {
     for (int i = 0; i < 5; i++)
     {
-	std::this_thread::sleep_for(1000ms);
+        std::this_thread::sleep_for(1000ms);
 
-	// 1. Update download data.
-	std::unique_lock<std::mutex> progress_Lock(mutexProgress);
-	dataString = dataString + "Data" + std::to_string(i);
+        // 1. Update download data.
+        std::unique_lock<std::mutex> progress_Lock(mutexProgress);
+        dataString = dataString + "Data" + std::to_string(i);
         std::cout << "DataFetch - We got data : " << dataString << std::endl;
 
-	// -----------------------------------------------------
-	// (1) Set predicate before unlock().
-	// -----------------------------------------------------
-	flagProgress = true;
+        // -----------------------------------------------------
+        // (1) Set predicate before unlock().
+        // -----------------------------------------------------
+        flagProgress = true;
 
-	// -----------------------------------------------------
-	// (2) unlock(), in some way, before notify().
-	// -----------------------------------------------------
-	progress_Lock.unlock();
+        // -----------------------------------------------------
+        // (2) unlock(), in some way, before notify().
+        // -----------------------------------------------------
+        progress_Lock.unlock();
 
-	// 2. Notify.
-	// Notify() itself of a condition variable doesn't take predicate bool variable as argument.
+        // 2. Notify.
+        // Notify() itself of a condition variable doesn't take predicate bool variable as argument.
         condiVarProgress.notify_all();
     }
 
@@ -65,30 +65,30 @@ void progressBar()
         // 1. Deal with progress
         std::unique_lock<std::mutex> progress_Lock(mutexProgress);
 
-	std::cout << "ProgressBar - Wait() on mutexProgress lock, with predicate......" << std::endl;
+	    std::cout << "ProgressBar - Wait() on mutexProgress lock, with predicate......" << std::endl;
         condiVarProgress.wait(progress_Lock, [] {return flagProgress;} );
 	
-	// Wake up means progress_lock got and locked mutexProgress.
-	std::cout << "ProgressBar - Waked up by Progress!" << std::endl;
+	    // Wake up means progress_lock got and locked mutexProgress.
+	    std::cout << "ProgressBar - Waked up by Progress!" << std::endl;
         
-	flagProgress = false;
+	    flagProgress = false;
 
-	std::cout << "ProgressBar - We have received " << dataString.size() << " bytes data." << std::endl;
+	    std::cout << "ProgressBar - We have received " << dataString.size() << " bytes data." << std::endl;
 	
-	progress_Lock.unlock();
+	    progress_Lock.unlock();
 
         // 2. Deal with complete check
-	std::unique_lock<std::mutex> complete_Lock(mutexComplete);
-	// Wait 10ms, then check flagComplete, If false, wait_for() return false.
+	    std::unique_lock<std::mutex> complete_Lock(mutexComplete);
+	    // Wait 10ms, then check flagComplete, If false, wait_for() return false.
         if ( condiVarComplete.wait_for(complete_Lock, 10ms, [] { return flagComplete; }) ) 
         {
             std::cout << "ProgressBar - Waked up by download finish!" << std::endl;
             break;
         }
-	else
-	{
-	    std::cout << "ProgressBar - Download ongoing..." << std::endl;
-	}
+	    else
+	    {
+	        std::cout << "ProgressBar - Download ongoing..." << std::endl;
+	    }
     }
 }
 
