@@ -71,6 +71,29 @@
    Usually, you should set/unset predicate when it is still locked. 
    See [15-6-ThreadSync-DownloaderExample.cpp].
 
+3. Futrue and Promise - Data transfer between threads
+   C++ doesn't provide a way to do this. 
+   Thread task function can have return value, but it will be ignored since std::thread doesn't provide return value.
+   (1) Shared variable can be a way, but it needs lock for access;
+   (2) Condition variable can sync threads, notifying another thread that a shared variable is changed;
+
+    But these are not direct way to transfer data from one thread to another.
+
+    std::promise & std::future
+    - They together create a shared state of transfering data between threads;
+    - No shared variable, and no explicit lock needed;
+    In core, they have a producer - consumer mechanism. The Producer (std::promise) generates some result which will be saved into 
+    shared state, while the consumer (std::future) will get also in the shared state. In brief:
+    std::promise - Generate to shared state;
+    std::future  - Get from shared state;
+
+    std::promise is usually paired with std::future; 
+    However, std::future, which represents results that are not yet available, works with many asynchronous objects and operations, 
+    not just std::promise. std::future can be obtained from std::promise, or returned from an asynchronous operation.
+
+    
+
+
 
 
 
