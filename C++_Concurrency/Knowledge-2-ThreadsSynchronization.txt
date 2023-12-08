@@ -91,7 +91,34 @@
     However, std::future, which represents results that are not yet available, works with many asynchronous objects and operations, 
     not just std::promise. std::future can be obtained from std::promise, or returned from an asynchronous operation.
 
+    The Usage of std::promise and std::future 
+    (1) In parent thtread, you need to generate the std::promise and std::future, and then pass them to producer and consumer threads.
+        -------------------------------------------------------
+        std::promise<int> prom;
+        std::future<int> fut = prom.get_future();
+
+        std::thread thProducer(producerFunc, std::ref(prom));
+        std::thread thConsumer(consumerFunc, std::ref(fut));
+        -------------------------------------------------------
+    (2) Inside the producer and consumer thread:
+        -------------------------------------------------------
+        void producer(std::promise<int> &pr)
+        {
+            int x = 1;
+            ...
+            pr.set_value(x)
+        }
+
+        void consumer(std::future &fut)
+        {
+            // This get() will block until producer generate the data.
+            // Then the consumer will wake here.
+            int x = fut.get();
+        }
     
+    std::promise and std::future with exception
+    No notes here since I didn't study this issue seriously.
+
 
 
 
