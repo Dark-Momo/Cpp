@@ -1,6 +1,11 @@
 1.  Integer Operations under multithreads
     On most machine, Integer operation is in a single instruction, which means the operation to integer is un-interruptable.
     Then why we still need to use lock to protect the access to integer when multi-threads?
+   
+    Even this single instruction contains 3 steps:
+    (1) CPU core fetches data from cache;
+    (2) Do operation;
+    (3) Write back to store buffer;
 
     Example: You have a shared int variable initialized to 0. And a function increasing its value by 1 for 100 times.
     Now you create a thread vector with 10 of this threads, what is the value of this int at the end? 
@@ -33,3 +38,16 @@
         }
     }
     // -----------------------------------------------------------------------------------------------
+    Above 2 also means that we can make data a atomic variable.
+
+    [Atomic Variable]
+    Compiler will generate special instructions that:
+    1. Prevent CPU to pre-fetch atomic variables. It will only fetch data when thread needs it;
+    2. It also forces CPU cores to flush its store buffer immediately;
+    It will turn off all optimizations to the access of atomic variable, so the operations will take longer than usual.
+
+
+
+
+
+
