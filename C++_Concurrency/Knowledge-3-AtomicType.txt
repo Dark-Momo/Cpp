@@ -64,7 +64,14 @@
     (1) Use lock and unlock;    
     (2) If atomic, the class's copy and assignment ctors should be trivial. And it is better to use pointer for class.
 
+    One disadvantage is that atomic pointer doesn't support dereference(. or ->). So if you want to do that, assign it to another 
+    non-atomic pointer, and do de-referrence to it.
 
+3.  Volatile keyword
+    It indicates the variavble may change anytime even without explicit assignment to it in the code. It is usually used when accessing
+    hardware. It prevents some optimization from compiler.
+
+    It has nothing to do with thread safe, or data race.
 
 
 
