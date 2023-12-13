@@ -40,11 +40,29 @@
     // -----------------------------------------------------------------------------------------------
     Above 2 also means that we can make data a atomic variable.
 
-    [Atomic Variable]
+2.  Atomic Variable
+
     Compiler will generate special instructions that:
     1. Prevent CPU to pre-fetch atomic variables. It will only fetch data when thread needs it;
     2. It also forces CPU cores to flush its store buffer immediately;
     It will turn off all optimizations to the access of atomic variable, so the operations will take longer than usual.
+
+    When you make a variable atomic, all operations on this variable become atomic. Other threads can't interleave its operation.
+
+    You need to initialize variable when you declare it.
+    ----------------------------------------------------------------------------------------------------------------------------
+    #include <atom>
+    atomic<int> x = 0;
+    x = 2;
+    y = x; // y need not to be atomic
+    // Both of above 2 operations are atomic, for themselves. Other thread can interleave between the 2 steps, and changing the 
+    // value of x before "y = x". 
+    ----------------------------------------------------------------------------------------------------------------------------
+
+    Usually, the types here are what called "trivially copyable". The most common ones are integers and pointers.
+    For classes:
+    (1) Use lock and unlock;    
+    (2) If atomic, the class's copy and assignment ctors should be trivial. And it is better to use pointer for class.
 
 
 
