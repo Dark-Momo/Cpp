@@ -51,7 +51,7 @@
 
     You need to initialize variable when you declare it.
     ----------------------------------------------------------------------------------------------------------------------------
-    #include <atom>
+    #include <atomic>
     atomic<int> x = 0;
     x = 2;
     y = x; // y need not to be atomic
@@ -72,6 +72,31 @@
     hardware. It prevents some optimization from compiler.
 
     It has nothing to do with thread safe, or data race.
+
+4.  Atomic Operations
+    Atomic types are actully a template. So it has its own operators.
+    (1) store() : replace a object's value with its argument atomically;
+    (2) load()  : return object's value atomically;
+    (3) Operator=() and operator T();
+    (4) exchange() : replace object value, and return previous one;
+
+    For pointers, atomic type have operations:
+    (1) Self increment/decrement: ++/--;
+    (2) fetch_add(), which equals to x++;
+    (3) fetch_sub(), which equals to x--;
+    (4) += and -=;
+
+    For integers, atomic type have operations:
+    (1) ALL mentioned above;
+    (2) Bitwise : &, |, ^;
+
+
+
+
+
+
+
+
 
 
 
