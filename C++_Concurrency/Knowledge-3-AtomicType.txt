@@ -89,15 +89,3 @@
     For integers, atomic type have operations:
     (1) ALL mentioned above;
     (2) Bitwise : &, |, ^;
-
-
-
-
-
-
-
-
-
-
-
-
