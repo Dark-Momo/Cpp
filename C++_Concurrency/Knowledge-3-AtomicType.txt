@@ -2,18 +2,18 @@
     On most machine, Integer operation is in a single instruction, which means the operation to integer is un-interruptable.
     Then why we still need to use lock to protect the access to integer when multi-threads?
    
-    Even this single instruction contains 3 steps:
+    Even this single instruction, i++, contains 3 steps:
     (1) CPU core fetches data from cache;
     (2) Do operation;
     (3) Write back to store buffer;
 
-    Example: You have a shared int variable initialized to 0. And a function increasing its value by 1 for 100 times.
+    Example: You have a shared int variable initialized to 0. And a function increasing its value by 1 for 10000 times.
     Now you create a thread vector with 10 of this threads, what is the value of this int at the end? 
     ------------------------------
-    Is it 1000? Very possible NOT.
+    Is it 100000? Very possible NOT.
     ------------------------------
     Because: 
-    (1) If you are expecting 1000, the 10 threads should be:
+    (1) If you are expecting 100000, the 10 threads should be:
            thread-1       thread-2       thread-3              thread-10
         |--------------|--------------|--------------|......|--------------|
     (2) But actually:
@@ -24,7 +24,7 @@
                                |--------------|
         Not only they are interleaved, but also some earlier started threads may ends later than threads started later.
 
-    So, if you expect 1000, you should add lock to each threads, so that they actually run one by one.
+    So, if you expect 100000, you should add lock to each threads, so that they actually run one by one.
     // -----------------------------------------------------------------------------------------------
     void selfIncrement(void)
     {
@@ -60,6 +60,7 @@
     ----------------------------------------------------------------------------------------------------------------------------
 
     Usually, the types here are what called "trivially copyable". The most common ones are integers and pointers.
+
     For classes:
     (1) Use lock and unlock;    
     (2) If atomic, the class's copy and assignment ctors should be trivial. And it is better to use pointer for class.
@@ -68,7 +69,7 @@
     non-atomic pointer, and do de-referrence to it.
 
 3.  Volatile keyword
-    It indicates the variavble may change anytime even without explicit assignment to it in the code. It is usually used when accessing
+    It indicates the variable may change anytime even without explicit assignment to it in the code. It is usually used when accessing
     hardware. It prevents some optimization from compiler.
 
     It has nothing to do with thread safe, or data race.
@@ -89,3 +90,68 @@
     For integers, atomic type have operations:
     (1) ALL mentioned above;
     (2) Bitwise : &, |, ^;
+
+    std::atomic_flag is a simpler implementation of std::atomic<bool>, with less overhead.
+    (1) It must be initialized to false using below code line
+        std::atomic_flag lock = ATOMIC_FLAG_INIT;
+    (2) It only has 3 member functions:
+        - clear() : set to false;
+        - test_and_set() : set to true and return previous value;
+        - operator =() as above initialization code shows;
+    
+    std::atomic_flag can be used to implement spin-lock.
+
+5.  Spin lock
+    Spin lock is basically a infinite (waiting) loop until one condition becomes true. Here, the condition is std::atomic_flag.
+    The point is, each thread runs in a waiting loop, keep calling test_and_set().
+    - If it returns [true]
+      It means some other thread has set the flag, which means that thread is in critical region.
+      So current thread should keep in the waiting loop;
+    - If it returns [false]
+      It means there is no thread which has set the flag, and current thread can go into critical region, and has set the flag.
+    
+    When current thread gets out of critical region, set the flag to false.
+    -----------------------------------------------------------------------
+    // Initialize flag in global area.
+    std::atomic_flag flag = ATOMIC_FLAG_INIT;
+
+    void task()
+    {
+        // Loop until we get a false
+        while (flag.test_and_set()) {}
+
+        // Critical region below
+        //
+
+        flag.clear()
+    }
+    -----------------------------------------------------------------------
+
+    Comparion with lock using mutex below.
+    -----------------------------------------------------------------------
+    std::mutex myMutex;
+    void task()
+    {
+        std::lock_guard<std::mutex> lockGuard(myMutex);
+
+        // Critical region below
+        //
+        
+        // No lock release since destructor will take care.
+    }
+
+    Comparion between Spinlock and Mutex
+    (1) Threads with spinlock is always running, and checking the flag return value;
+        Threads with mutex is blocked, and maybe taken from the core by scheduler;
+    (2) When a thread gets spinlock, it can continuing running immediately;
+        When a thread gets mutex, it needs to be woke up. If the thread is not at the core, it needs reload. 
+        Both of which under mutex case will have more delay.
+
+    Bad side of spinlock
+    (1) It is processor intensive. You have a core just running and waiting for spinlock, not doing useful things.
+        So the critical region really should be short, so that the spinlock will be avaialbe very soon, reducing waiting time.
+    (2) It should be used in very low-contension case. Basically, it is the only thread that will get into critical section.
+        If there are many threads trying for the critical section, spinlock will have pervormance impact.
+    (3) Only people clearly knowing what they are doing are suggested to use spinlock. And that is why spinlock is not
+        in standard library. And spinlock should only be used in OS level code or library, not application.
+     

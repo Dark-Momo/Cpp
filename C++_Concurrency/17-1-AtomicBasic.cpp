@@ -11,7 +11,7 @@ int main(void)
     std::cout << "Initialized x = " << x << std::endl;
     std::cout << "x.load() = " << x.load() << std::endl;
 
-    std::cout << "x.exchange(2) = " << x.exchange(2) << std::endl;
+    std::cout << "x.exchange(2) = " << x.exchange(2) << std::endl; // x.exchange(2) = 1
     std::cout << "Initialized x = " << x << std::endl;
     std::cout << "x.load() = " << x.load() << std::endl;
 
