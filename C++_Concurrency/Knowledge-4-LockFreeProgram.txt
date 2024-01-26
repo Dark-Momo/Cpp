@@ -1,0 +1,16 @@
+1. Lock programming and Lock-Free Programming
+   
+   Lock programming uses mutex, like a Stop-and- Wait traffic light. It has some extra cost by using locking and unlocking.
+   When contension is high, this cost could be high because a lot of threads are waiting.
+   Also, coarse lock makes the code lose scalability, while fine lock brings extra performance cost.
+
+   Lock-Free programming is like MotorWay-style intersection. Different thread works on the same critical region 
+   at the same time.
+   If done correctly, there will be no deadlock or livelock. Other threads can still work if one thread blocks.
+   It is used in real-time system that requires job to be done in a certain amount of time.
+
+   Lock-Free programming is complex, so it is usually used in cases:
+   (1) A data structure with high contension that using mutex will bring unacceptable performance cost;
+
+
+
