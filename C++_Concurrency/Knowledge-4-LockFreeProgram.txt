@@ -9,8 +9,10 @@
    If done correctly, there will be no deadlock or livelock. Other threads can still work if one thread blocks.
    It is used in real-time system that requires job to be done in a certain amount of time.
 
-   Lock-Free programming is complex, so it is usually used in cases:
-   (1) A data structure with high contension that using mutex will bring unacceptable performance cost;
+   Lock-Free programming is complex, so it is usually used for data structure with high contension that using mutex will
+   bring unacceptable performance cost.
+
+   3 videos here, Lecture 59, 60, 61, are not taken yet.
 
 
 
