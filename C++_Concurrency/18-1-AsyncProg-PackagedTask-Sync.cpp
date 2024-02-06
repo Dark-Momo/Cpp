@@ -25,7 +25,7 @@ int main(void)
     // Here we call this task in current thread. 
     // Under this case, the current calling thread will stop and wait for the new task to finish. 
     // It is like calling a function, it is Synchoronous;
-    pTask(4, 5);
+    pTask(4, 5); // Task starts when operator() is called.
     
     std::cout << "Waitinf for result of addition...\n";                 // Display after 2000ms.
     std::cout << "Addition of 4 + 5 is : " << fut.get() << std::endl;   // Display after 2000ms.

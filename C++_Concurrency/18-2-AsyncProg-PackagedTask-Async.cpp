@@ -23,7 +23,7 @@ int main(void)
     // 2. In a new thread, passing the task to std::thread's constructor. 
     //    Under this case, the calling thread and the new thread will run concurrently;
     // We put this task into a separate thread.
-    std::thread taskTh(std::move(pTask), 4, 5);
+    std::thread taskTh(std::move(pTask), 4, 5); // Task starts when operator() is called.
     
     std::cout << "Waitinf for result of addition...\n";                 // Display immediately.
     std::cout << "Addition of 4 + 5 is : " << fut.get() << std::endl;   // Display after 2000ms.

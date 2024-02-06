@@ -25,7 +25,8 @@
     (1) // Callable object below is a function that take 2 int as input, and int as return.
         std::packaged_task<int(int, int)> pTask(...);
     
-    (2) It has a get_future() member, associated with its std::promise();
+    (2) It has a get_future() member, associated with its std::promise().
+        The advantage of std::packaged_task is that you don't need to create std::promise yourself.
     (3) It is move-only, can't be copied;
     (4) Task starts when operator() is called;
         - In the same thread, call it directly. Under this case, the current calling thread will stop and wait for the
