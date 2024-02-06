@@ -1,0 +1,35 @@
+1.  Asynchoronous Programming
+    Asynchoronous programming means several tasks runs at the same time, and one doesn't need another to finish.
+    
+    An example is, a task needs to get some data from backend. After issuing the request, it can wait for the
+    data to come and then execute the next step (Synchoronous), or it can immediately work on its next step, and 
+    when it gets to the function that really works on the data, it checks whether the data is ready (Asynchoronous).
+
+    Asynchoronous programming can reduce blocking. Blocking can come from waiting for critical region, or join.
+    
+    Mutex/atomic operation is synchoronization between blockings.
+    There is also non-blocking synchoronization. Threads communicates using concurrent queues. C++ itself doesn't
+    have this kind of queue, while Boost, MicroSoft and Intel provides.
+
+2.  Create a task
+    The task here means an encapsulated execution sequences, or a function unit that deals with a special request.
+    When we are talking about "asynchoronous" here, we mean Asynchoronous between Tasks.
+
+    std::packaged_task, define in <future>, encapsulates a task.
+    (1) A callable object for the task's code;
+    (2) A std::promise stores the task result;
+    It actually provides abstraction.
+
+    std::packaged_task is a template class (actually functor class), with the callable object as its parameter.
+    
+    (1) // Callable object below is a function that take 2 int as input, and int as return.
+        std::packaged_task<int(int, int)> pTask(...);
+    
+    (2) It has a get_future() member, associated with its std::promise();
+    (3) It is move-only, can't be copied;
+    (4) Task starts when operator() is called;
+        - In the same thread, call it directly. Under this case, the current calling thread will stop and wait for the
+          new task to finish. It is like calling a function, it is Synchoronous;
+        - In a new thread, passing the task to std::thread's constructor. Under this case, the calling thread and the
+          new thread will run concurrently;
+    
