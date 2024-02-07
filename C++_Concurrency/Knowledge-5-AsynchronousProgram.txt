@@ -11,7 +11,9 @@
     There is also non-blocking synchoronization. Threads communicates using concurrent queues. C++ itself doesn't
     have this kind of queue, while Boost, MicroSoft and Intel provides.
 
-2.  Create a task
+    Both std::packaged_task and std::async() is higher abstraction than that of std::thread.
+
+2.  Create a task - std::packaged_task
     The task here means an encapsulated execution sequences, or a function unit that deals with a special request.
     When we are talking about "asynchoronous" here, we mean Asynchoronous between Tasks.
 
@@ -34,3 +36,6 @@
         - In a new thread, passing the task to std::thread's constructor. Under this case, the calling thread and the
           new thread will run concurrently;
     
+3.  Create a task - std::async()
+    Defined in <future>, it is a function, not a class like std::packaged_task.
+    std::async() returns a std::future object, which contains the task return.
