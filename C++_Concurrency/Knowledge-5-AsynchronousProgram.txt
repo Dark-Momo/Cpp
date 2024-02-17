@@ -38,4 +38,59 @@
     
 3.  Create a task - std::async()
     Defined in <future>, it is a function, not a class like std::packaged_task.
-    std::async() returns a std::future object, which contains the task return.
+    std::async() returns a std::future object, which contains the task return. Then we can use get() to extract
+    the return value.
+    
+    If the task throws exception, it will also get through by the return value of std::future.
+
+    std::async() may start the task in current thread, or a new thread, controlled by launch flag.
+    (1) std::launch::async will start a new thread, and run thge task immediately;
+    (2) std::launch::deferred : nothing will happen until we call get() for its return value. Lazy Evaluation.
+    These 3 options are bit-wise, so they can be set together using OR. And this is the dfault setting for async().
+    Implemantation will decide whether to have a new thread or not.
+
+    Here, the video [Video - 65] explains when to use std::launch::async and std::launch::deferred.
+    It also explains wait(), wait_for(), and wait_until().
+
+4. Choose a thread object
+    Now, we have 3 methods to create a thread object:
+    (1) std::thread();
+    (2) std::packaged_task();
+    (3) std::async();
+
+  [std::async()] 
+  - Simplest way to create a task
+  - Easy to get return value and exception;
+  - Can choose to Asynchoronously in a different thread, or Synchoronously in current thread;
+  It is high level abstraction than std::thread.
+  - Library manages the thread like start, join, and communication;
+  - No need to use shared data, so no need to use lock and atomic type;
+
+  Disadvantages:
+  (1) Can't detach;
+  (2) If with std::launch::async option and use std::future to get its return value, the task is implicitly joined.
+      That is because the destructor of std::future need to wait for the task to finish.
+      --------------------------------------------------------------------------------------
+      [Video - 66]
+      {
+        std::future fut = std::async(std::launch::async, func);
+      }
+      // Dtor of fut will block until task finishes, making the program like Synchoronously.
+      --------------------------------------------------------------------------------------
+   
+  [std::packaged_task]
+  - Best choice if you want to represent the task as an object, like creating a container of tasks;
+  - More control than std::async();
+
+  [std::thread]
+  - Most flexible, such as setting priority and pinning to a specific core;
+  - Can be detached;
+
+  Recommendation:
+  - Start a new task in general, use async();
+  - Thread container, use std::packaged_task;
+  - For detach, and more specific features, use std::thread;
+
+
+
+

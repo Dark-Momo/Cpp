@@ -15,6 +15,7 @@ int main(void)
     std::cout << "Calculate fibonacci(44)\n";
 
     // Below task will run immediately when std::aysn() is called. Different from std::packaged_task.
+    // It returns std::future, but using 'auto' is also fine.
     // auto fiboResult = std::async(fibonacci, 44);
     std::future fiboResult = std::async(fibonacci, 44);
     
