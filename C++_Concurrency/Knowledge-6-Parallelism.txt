@@ -1,0 +1,10 @@
+1. Thread-Level Parallelism (TLP)
+   Parallelism is to divide task into several sub-tasks, which don't need to interact with each other so they can
+   run on different cores concurrently.
+
+   While concurrent programming explained previously needs interaction between threads, and can run on only 1 core.
+   
+
+
+
+   
