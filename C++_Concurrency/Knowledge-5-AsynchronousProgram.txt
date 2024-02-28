@@ -44,7 +44,7 @@
     If the task throws exception, it will also get through by the return value of std::future.
 
     std::async() may start the task in current thread, or a new thread, controlled by launch flag.
-    (1) std::launch::async will start a new thread, and run thge task immediately;
+    (1) std::launch::async will start a new thread, and run the task immediately;
     (2) std::launch::deferred : nothing will happen until we call get() for its return value. Lazy Evaluation.
     These 3 options are bit-wise, so they can be set together using OR. And this is the dfault setting for async().
     Implemantation will decide whether to have a new thread or not.
