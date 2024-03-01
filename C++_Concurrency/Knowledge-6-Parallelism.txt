@@ -3,8 +3,9 @@
    run on different cores concurrently.
 
    While concurrent programming explained previously needs interaction between threads, and can run on only 1 core.
-   
 
+2. C++ Standard Algorithm
+   C++ Standard Algorithm is a set of standard library functions which implements classic operations like
+   searching, sorting, copying, populating, and so on. They usually work on data container or sequence, not raw data.
 
-
-   
+   Most of them are in <algorithm>, with few in <numeric>. 
