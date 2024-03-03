@@ -9,3 +9,52 @@
    searching, sorting, copying, populating, and so on. They usually work on data container or sequence, not raw data.
 
    Most of them are in <algorithm>, with few in <numeric>. 
+
+3. Ways of code execution
+   There are 4 ways:
+   (1) Sequential - A single instruction processes one data item at one time;
+   (2) Vectorize  - A single instruction processes multiple data items at one time. The "multiple data" here doesn't
+                    mean multiple bits in an integer, but multiple integers as example.
+                    
+                    This requires special data structure, which should be one after another in memory without
+                    gaps. Vectors and arrays are typical example of this kind, while maps and linked list are NOT.
+   
+                    This also requires hardware suuport.
+   (3) Parallel   - Several instructions each process one data item at a time.
+                    This requires support from algorithm that can divide computation or data into small pieces.
+   (4) Parallel + Vectorized : Several instructions that each can process multiple data at a time.
+
+   In C++17, for standard library algorithm, we can specify its execution method: 
+   Sequential, Parallel, or Parallel + Vectorized.
+   Vectorize only (not Parallel) is available from C++20.
+
+   Execution Policy is just a request, the compiler may not implement it.
+   G++ will by default use C++14 and compile without policy. Clang doesn't support policy, and it won't compile.
+
+   Execution Policy defined in <execution>, which is available after C++17.
+   -----------------------------------------------
+   std::sort(vec.begin(), vec.end());
+   // In C++14, it is sequential;
+   // Still fine in C++17, and still sequential;
+
+   // In C++17
+   namespace se = std::execution;
+   std::sort(se::seq, vec.begin(), vec.end());        // Sequential
+   std::sort(se::par, vec.begin(), vec.end());        // Parallel
+   std::sort(se::par_unseq, vec.begin(), vec.end());  // Parallel + Vectorized
+   std::sort(se::unseq, vec.begin(), vec.end());  // Parallel + Vectorized
+
+   3.1 Sequential Policy
+   Operations will be executed on a single thread, which calls the algorithm function.
+   
+   Then What is the difference between 'C++14 default without specifying anything' and 'C++17 se::seq'?
+   The answer is with se::seq, you can change the operatio order of specific algorithm.
+
+   // Below will sort vector from big to small, which by default would be from small to big.
+   std::sort(se::seq, vec.begin(), vec.end(), [](int a, int b) {return b < a} );
+
+
+
+
+   
+
