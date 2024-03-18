@@ -1,0 +1,11 @@
+1.  Concurrent Programming and Data Structure
+    Concurrent programming even on different parts of a data structure could cause a problem. Program 20-1 is an example.
+    We have 2 threads filling in a vector, each fills in 10000 elements. Vector has resize feature, if it is going to be 
+    full to some extent, it will resize. 
+    
+    However, we have 2 threads here. When the vector occupied by one thread decides to resize, it will allocate new space, 
+    move data, an delete the old one. But, the other thread will still add data to the old space, causing:
+    ----------------------------
+    malloc(): corrupted top size
+    Aborted (core dumped)
+    ----------------------------
