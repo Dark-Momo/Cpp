@@ -2,11 +2,11 @@
    Parallelism is to divide task into several sub-tasks, which don't need to interact with each other so they can
    run on different cores concurrently.
 
-   While concurrent programming explained previously needs interaction between threads, and can run on only 1 core.
+   While concurrent programming explained previously needs interaction between threads, and can run on only one core.
 
 2. C++ Standard Algorithm
    C++ Standard Algorithm is a set of standard library functions which implements classic operations like
-   searching, sorting, copying, populating, and so on. They usually work on data container or sequence, not raw data.
+   searching, sorting, copying, populating, and so on. They usually work on data container or sequence, not on raw data.
 
    Most of them are in <algorithm>, with few in <numeric>. 
 
@@ -22,17 +22,17 @@
                     This also requires hardware suuport.
    (3) Parallel   - Several instructions each process one data item at a time.
                     This requires support from algorithm that can divide computation or data into small pieces.
-   (4) Parallel + Vectorized : Several instructions that each can process multiple data at a time.
+   (4) Parallel + Vectorized - Several instructions that each can process multiple data at a time.
 
    In C++17, for standard library algorithm, we can specify its execution method: 
    Sequential, Parallel, or Parallel + Vectorized.
    Vectorize only (not Parallel) is available from C++20.
 
    Execution Policy is just a request, the compiler may not implement it.
-   G++ will by default use C++14 and compile without policy. Clang doesn't support policy, and it won't compile.
+   g++ will by default use C++14 and compile without policy. Clang doesn't support policy, and it won't compile.
 
    Execution Policy defined in <execution>, which is available after C++17.
-   -----------------------------------------------
+   ---------------------------------------------------------------------------------------------------------
    std::sort(vec.begin(), vec.end());
    // In C++14, it is sequential;
    // Still fine in C++17, and still sequential;
@@ -42,16 +42,25 @@
    std::sort(se::seq, vec.begin(), vec.end());        // Sequential
    std::sort(se::par, vec.begin(), vec.end());        // Parallel
    std::sort(se::par_unseq, vec.begin(), vec.end());  // Parallel + Vectorized
-   std::sort(se::unseq, vec.begin(), vec.end());  // Parallel + Vectorized
+   std::sort(se::unseq, vec.begin(), vec.end());      // Parallel + Vectorized
+   ---------------------------------------------------------------------------------------------------------
 
    3.1 Sequential Policy
    Operations will be executed on a single thread, which calls the algorithm function.
    
    Then What is the difference between 'C++14 default without specifying anything' and 'C++17 se::seq'?
-   The answer is with se::seq, you can change the operatio order of specific algorithm.
-
+   The answer is with se::seq, you can change the operatio order of specific algorithm. Below is an example.
+   ---------------------------------------------------------------------------------------------------------
    // Below will sort vector from big to small, which by default would be from small to big.
    std::sort(se::seq, vec.begin(), vec.end(), [](int a, int b) {return b < a} );
+   ---------------------------------------------------------------------------------------------------------
+
+   3.2 Parallel policy
+   Parallel policy will generate many threads to run the algorithm. Be cautious to prevent possible data race here.
+   See [CourseVideo - 71] for the example.
+   [CourseVideo 72 - 76] is not watched.
+   
+
 
 
 
