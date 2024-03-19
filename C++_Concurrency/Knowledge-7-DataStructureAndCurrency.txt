@@ -9,3 +9,19 @@
     malloc(): corrupted top size
     Aborted (core dumped)
     ----------------------------
+    Vector, linked list, string, dynamic array would all have this issue.
+
+    Solution: Add lock to each thread to let them run sequentially.
+
+2.  Above mentioned data structures, which are all C++ STL containers, are memory objects.
+    (1) Concurrent read are thread-safe;
+    (2) If only one thread will write, it will also be thread-safe, as long as there is no concurrent reading when writing;
+    (3) Concurrent writing is not thread-safe;
+
+    In order to have thread-safe operations for above data structure, we need to:
+    (1) Coarse-grained
+    Add lock to the whole operation to the data structure, like what is shown in Program 20-1. We have to use this method
+    if we are dealing with built-in types, C++ STL types, and types other people give to us that we can't modify.
+    
+    Under this case, the operations to the data structure are actully single-threaded/sequential.
+                      

@@ -1,11 +1,14 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <mutex>
 
 std::vector<int> vec;
+std::mutex myMutex;
 
 void fillin_Lower(void)
 {
+    std::lock_guard<std::mutex> lockGuard(myMutex);
     for (int i = 0; i < 10000; i++)
     {
         vec.push_back(i);
@@ -14,6 +17,7 @@ void fillin_Lower(void)
 
 void fillin_High(void)
 {
+    std::lock_guard<std::mutex> lockGuard(myMutex);
     for (int i = 10000; i < 20000; i++)
     {
         vec.push_back(i);
