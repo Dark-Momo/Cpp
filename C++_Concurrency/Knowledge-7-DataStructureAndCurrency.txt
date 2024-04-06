@@ -19,9 +19,45 @@
     (3) Concurrent writing is not thread-safe;
 
     In order to have thread-safe operations for above data structure, we need to:
-    (1) Coarse-grained
+    - Coarse-Grained
     Add lock to the whole operation to the data structure, like what is shown in Program 20-1. We have to use this method
     if we are dealing with built-in types, C++ STL types, and types other people give to us that we can't modify.
     
     Under this case, the operations to the data structure are actully single-threaded/sequential.
-                      
+
+    - Fine-Grained
+    Fine control on what data should be locked based on coarse-grained scheme. For example, in a link list, add lock to 
+    current/previous/next node, which usaully get involved for a lot of operations.
+    But this scheme is more difficult to implement, and will add extra code.
+
+3.  Shared Pointer
+    std::shared_ptr is introduced in C++11. It uses reference counting. When a std::shared_ptr is copied or assigned, there
+    is no memory operation. It just increments the count by 1. When a copy is destroyed, it decrements by 1. When it is 0,
+    the memory is released.
+
+    std::shared_ptr is defined in <memory>. It typical usage can be:
+    -----------------------------------------------------------------------------------------------------
+    std::shared_ptr<int> ptr1(new int(42));
+    // The count is 1 now for both ptr2
+    auto ptr2 = std::make_shared<int>(42);
+
+    // The count is 2 now for both ptr2 and ptr3
+    std::shared_ptr<int> ptr3 = ptr2;
+    // Assign and move will also have the same effect as copy above.
+
+    // std::shared_ptr only support deference. Arithmetic operations to std::shared_ptr is not supported.
+    // *ptr3 will get the data that this pointer points to.
+    -----------------------------------------------------------------------------------------------------
+
+    std::shared_ptr vs std::unique_ptr
+    - Only use std::shared_ptr when it is unavoidable. -  
+    std::unique_ptr has the same overhead as a normal pointer, while std::shared_ptr has more.
+    std::shared_ptr has count tracking for copy, assignment, move and destruct.
+
+    std::shared_ptr has a counter, and pointer to data. When modifying the counter, or deference-then-modify the data
+    pointer, it is possible to have data race. 
+    So, how about its thread-safe issue?
+    - Counter reference is atomic type. So it is thread-safe. No extra code for multi-thread, and it is internal 
+      synchoronized. But brings overhead to single-thread program.
+    - The pointer to data is responsiblity of programmer. Programmer should avoid data race, using external synchoronization
+      such as mutex, for concurrent access.
