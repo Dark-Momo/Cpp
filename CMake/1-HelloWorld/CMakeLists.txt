@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 # This will set ${PROJECT_NAME} to the content in () so later, you can just use ${PROJECT_NAME}.
-project(HelloWorldExample)
+project(1-HelloWorld)
 
 # When this line is added, the generated Makefile has our source .cpp file in it.
 add_executable(${PROJECT_NAME} HelloWorld.cpp)

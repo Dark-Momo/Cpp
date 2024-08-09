@@ -73,3 +73,6 @@
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
     -------------------------------------------------------------------------------------------------------
 
+    So here you first run "cmake -S ./ -B ../build/1-HelloWorld" to generate makefile, and then run "make install"
+    to compile out executable file and install to /usr/local/bin.
+
