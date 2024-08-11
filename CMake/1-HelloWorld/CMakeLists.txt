@@ -5,8 +5,11 @@ cmake_minimum_required(VERSION 3.22.1)
 project(1-HelloWorld)
 
 # When this line is added, the generated Makefile has our source .cpp file in it.
+# The 1st argument of "add_executable" is the name of generated binary file. Here, we make it
+# the same as the project's name. But we can use other names.
 add_executable(${PROJECT_NAME} HelloWorld.cpp)
 
 # 'intall' will enable "make install" at make stage after cmake command.
 # It will copy generated executable file into /usr/local/bin.
+# The name for TARGETS shoule be the same as the 1st argument of "add_executable".
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
