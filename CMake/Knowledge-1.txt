@@ -55,7 +55,7 @@
     ------------------------------------------------------------------------------------------------------------------
 
     In the above example, the generated Makefile in build diretory is a long and complete one. But CMakeLists.txt is still empty.
-    ** If you check the generated Makefile, it only has some general rules, doesn't have our .cpp file information in it.
+    If you check the generated Makefile, it only has some general rules, doesn't have our .cpp file information in it.
     
     We need to edit the CMakeLists.txt file to contain source file information. And it is the line:
     ----------------------------------------------
