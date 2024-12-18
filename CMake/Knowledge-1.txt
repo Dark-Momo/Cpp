@@ -54,7 +54,7 @@
     // CMakeLists.txt is still empty after cmake compile here.
     ------------------------------------------------------------------------------------------------------------------
 
-    In the above example, the generated Makefile in build diretory is a long and complete one. But CMakeLists.txt is still empty.
+    In the above example, the generated Makefile is a long and complete one. But CMakeLists.txt is still empty.
     If you check the generated Makefile, it only has some general rules, doesn't have our .cpp file information in it.
     
     We need to edit the CMakeLists.txt file to contain source file information. And it is the line:
@@ -71,15 +71,26 @@
     # It will copy generated executable file into /usr/local/bin so that you can run the command anywhere.
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
-4. So basically:
-    -------------------------------------------------------------------------------------------------------
-    So here you first run "cmake -S ./ -B ../build/1-HelloWorld" to generate makefile, and then run "make install"
-    to compile out executable file and install to /usr/local/bin.
-    -------------------------------------------------------------------------------------------------------
+**********************************************************************************************************************
+There are 2 ways of compiling here:
+- If 'build' dir is created parallel to your project folder
+  (1) cmake -S ./YouProjectFolder -B ./build/YouBuildFolder
+  (2) cd build
+  (3) make
+  (4) ./YouExecutableFile
+  (5) make install if necessary after (3)
 
-    If you want to generate a library, it is almost the same for the CMakeLists.txt file, only to use
-    add_library().
+- If 'build' dir is created inside your project folder
+  (1) cd YouProjectFolder/build
+  (2) cmake ..          (.. tells Cmake that CMakeLists.txt is in .. folder, and put built file just here)
+  (3) cmake --build .   (--build . tells Cmake build exe using Makefile in . folder)
+  (4) ./YouExecutableFile
+
+These 2 methods differs on how to generate the executable file. One uses make command, the other uses --build option.
+**********************************************************************************************************************
 
 5. Project 2-SimpleLibrary and 2-TestSimpleLibrary show how to install library and its header file
    so that calling applications can call the library without need to consider its path;
 
+    If you want to generate a library, it is almost the same for the CMakeLists.txt file, only to use
+    add_library().
