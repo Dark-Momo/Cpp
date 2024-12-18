@@ -1,4 +1,5 @@
 # Debug Folder
+.vscode/
 #*/*/Debug/
 .DS_Store
 .gitignore
