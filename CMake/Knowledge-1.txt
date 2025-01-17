@@ -46,12 +46,23 @@ like '* Unix Makefiles', which means Unix Makefiles is default. Or you can speci
 cmake [options] -S <path-to-source> -B <path-to-build> -G "Unix Makefiles"
 --------------------------------------------------------------------------
 
+5. If you want to generate a library, it is almost the same for the CMakeLists.txt file, only to use
+-------------
+add_library()
+-------------
 
+Project 2-SimpleLibrary and 2-TestSimpleLibrary show how to install library and its header file so that calling 
+applications can call the library without need to consider its path.
 
+Both add_executable() and add_library() are in the form of:
+---------------------------------------------------------
+add_executable/library(TARGER_NAME SOURCE_FILE_NAME)
+---------------------------------------------------------
+One single Cmake file can contain both, which means it can build both library and executable file. It is usually 
+that we make function .cpp files as library, then build the executable file with libraries linked. 
 
+However, you can use below command at make stage to assign which target you want:
+---------------------------------------------------------
+cmake --build . --target TARGER_NAME
+---------------------------------------------------------
 
-. Project 2-SimpleLibrary and 2-TestSimpleLibrary show how to install library and its header file
-   so that calling applications can call the library without need to consider its path;
-
-    If you want to generate a library, it is almost the same for the CMakeLists.txt file, only to use
-    add_library().

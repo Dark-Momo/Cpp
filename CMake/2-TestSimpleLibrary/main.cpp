@@ -25,7 +25,6 @@ int main()
     // and you only gave 'int' and 'float' for the override.
     // For 'double', 'int' and 'float' has no priority preference when do casting.
     // So GCC will tell you it can't make decision. 
-    
 
     return 0;
 }
