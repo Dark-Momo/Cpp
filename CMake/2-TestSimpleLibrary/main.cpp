@@ -5,6 +5,7 @@
 
 // However, we do install them in previous project "1-SimpleLibrary".
 // So we directly call the name, getting rid of the path dependency.
+
 #include "simpleAdder.hpp" // Call from /usr/local/include/
 
 #include <iostream>
