@@ -2,24 +2,24 @@ CMake Project Structure with library
 
 1. Simplest
 This structure will have all of its source files, including calling file, library files, and headers in the same directory.
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 project(ProjectName)
 add_library(LibraryName STATIC/SHARED FILENAME)
 add_executable(ExecutableName FILENAME)
 target_link_libraries(ExecutableName PUBLIC/PRIVATE LibraryName)
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 
 2. Calling file and library files are in separate folders, and in there common parent folder, there is no Cmake file.
 The demo 2-SimpleLibrary and 2-TestSimpleLibrary is the example.
 
 (1) In library file folder, the CMakeLists.txt is:
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 project(LibraryProjectName)
 add_library(LibraryName STATIC/SHARED FILENAME)
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 
 (2) In calling design folder, CMakeLists.txt is:
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 Project(ExeProjectName)
 add_executable(ExecutableName FILENAME)
 target_link_directories(ExecutableName PUBLIC ${LIBRARY_PATH})
@@ -31,5 +31,47 @@ since we didn't denote the header path to CMake.
 In CMake, if a file want to include a header cross-folder, you need to:
 - Tell CMake where to look for include files explicitly;
 - Include the full path of the header in calling .cpp file;
----------------------------------------------------------------
+----------------------------------------------------------------------------------
 
+3. Calling files, and library files are in different folder, and there is Cmake file in their common parent folder.
+
+TopFolder
+-- CMakeLists.txt
+-- Src
+   -- CMakeLists.txt
+   -- main.cpp
+-- Library
+   -- CMakeLists.txt
+   -- Library.cpp
+   -- Library.hpp
+
+TopFolder should have CMakeLists.txt as below:
+----------------------------------------------------------------------------------
+project(ProjectName)
+
+add_subdirectory(Src)
+add_subdirectory(Library)
+----------------------------------------------------------------------------------
+
+Src folder should have CMakeLists.txt as below:
+----------------------------------------------------------------------------------
+add_executable(SimpleAdder main.cpp)
+# ********************************************************************************
+# We don't need target_link_directories() since we have add_subdirectory() at top.
+# ********************************************************************************
+target_link_libraries(SimpleAdder PRIVATE AdderLibrary)
+----------------------------------------------------------------------------------
+
+Library folder should have CMakeLists.txt as below:
+----------------------------------------------------------------------------------
+add_library(AdderLibrary STATIC simpleAdder.cpp)
+# Below line is not a MUST
+# target_include_directories(AdderLibrary PUBLIC .)
+----------------------------------------------------------------------------------
+
+If a folder has sub-folder that contains design, in the CMakeLists.txt here, we should use:
+-------------------
+add_subdirectory()
+-------------------
+to let cmake know it should go to that folder to check for CMakeLists.txt there to see what 
+it is supposed to do.
