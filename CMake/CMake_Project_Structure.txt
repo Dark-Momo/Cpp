@@ -34,41 +34,102 @@ In CMake, if a file want to include a header cross-folder, you need to:
 ----------------------------------------------------------------------------------
 
 3. Calling files, and library files are in different folder, and there is Cmake file in their common parent folder.
+***********************************************************************
+3.1 Library .cpp file and its header files are in the same folder
+***********************************************************************
 
 TopFolder
--- CMakeLists.txt
--- Src
-   -- CMakeLists.txt
+-- CMakeLists.txt    (1)
+-- App
+   -- CMakeLists.txt (2)
    -- main.cpp
--- Library
-   -- CMakeLists.txt
+-- Src
+   -- CMakeLists.txt (3)
    -- Library.cpp
    -- Library.hpp
 
-TopFolder should have CMakeLists.txt as below:
-----------------------------------------------------------------------------------
+CMakeLists.txt (1):
+--------------------------
 project(ProjectName)
 
+add_subdirectory(App)
 add_subdirectory(Src)
-add_subdirectory(Library)
-----------------------------------------------------------------------------------
+--------------------------
 
-Src folder should have CMakeLists.txt as below:
+CMakeLists.txt (2):
 ----------------------------------------------------------------------------------
 add_executable(SimpleAdder main.cpp)
-# ********************************************************************************
 # We don't need target_link_directories() since we have add_subdirectory() at top.
-# ********************************************************************************
 target_link_libraries(SimpleAdder PRIVATE AdderLibrary)
 ----------------------------------------------------------------------------------
 
-Library folder should have CMakeLists.txt as below:
-----------------------------------------------------------------------------------
+CMakeLists.txt (3):
+-----------------------------------------------------
 add_library(AdderLibrary STATIC simpleAdder.cpp)
 # Below line is not a MUST
 # target_include_directories(AdderLibrary PUBLIC .)
-----------------------------------------------------------------------------------
+-----------------------------------------------------
 
+***********************************************************************
+3.2 Library .cpp file and its header files are in the different folder
+***********************************************************************
+
+TopFolder
+-- CMakeLists.txt       (1)
+-- App
+   -- CMakeLists.txt    (2)
+   -- main.cpp
+-- Src
+   -- CMakeLists.txt    (3)
+   -- My_Library
+      -- CMakeLists.txt (4)
+      -- Library.cpp
+-- Inc
+   -- CMakeLists.txt    (5)
+   -- My_Library
+      -- CMakeLists.txt (6)
+      -- Library.hpp
+
+CMakeLists.txt (1):
+---------------------------------------------------------
+cmake_minimum_required(VERSION 3.22)
+project(CppProjectTemplate VERSION 1.0.0 LANGUAGES C CXX)
+
+set(EXECUTABLE_NAME Executable)
+set(LIBRARY_NAME Library)
+
+add_subdirectory(Src)
+add_subdirectory(Inc)
+add_subdirectory(App)
+---------------------------------------------------------
+
+CMakeLists.txt (2):
+----------------------------------------------------------------
+add_executable(${EXECUTABLE_NAME} "main.cpp")
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC ${LIBRARY_NAME})
+----------------------------------------------------------------
+
+CMakeLists.txt (3):
+---------------------------
+add_subdirectory(My_Library)
+---------------------------
+
+CMakeLists.txt (4):
+-------------------------------------------------
+add_library(${LIBRARY_NAME} STATIC "Library.cpp")
+-------------------------------------------------
+
+CMakeLists.txt (5):
+---------------------------
+add_subdirectory(My_Library)
+---------------------------
+
+CMakeLists.txt (6):
+-------------------------------------------------------
+target_include_directories(${LIBRARY_NAME} PUBLIC "./")
+-------------------------------------------------------
+
+[Note]
 If a folder has sub-folder that contains design, in the CMakeLists.txt here, we should use:
 -------------------
 add_subdirectory()
