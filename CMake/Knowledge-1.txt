@@ -83,4 +83,16 @@ install(TARGETS ${LIBRARY_NAME}
         PUBLIC_HEADER DESTINATION include)
 ---------------------------------------------------------
 
+7. Option "-DCMAKE_BUILD_TYPE=Release/Debug" defines build type.
+(1) Release : With highest optimization, maybe -o3;
+(2) Debug   : Without optimization, maybe -o0;
+
+set() and option() all defines variable. Those variables will also be recorded in build/CMakeCache.txt file;
+
+For the variable defined by option, you can use:
+(1) -D option when running Cmake command to change the value;
+(2) Directly edit the item in build/CMakeCache.txt to change the value;
+
+
+
 
