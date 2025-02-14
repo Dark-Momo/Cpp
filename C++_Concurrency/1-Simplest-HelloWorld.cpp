@@ -10,7 +10,11 @@ int main(void)
 {
     std::cout << "In main(), before creating the thread.\n";
 
-    // Run thread immediately. Funtion name can't be overloaded.
+    // *******************************************************************************
+    // 1. std::thread will create and run thread immediately;
+    // 2. Funtion name for std::thread can't be overloaded;
+    // 3. If taking below as a function, std::thread's return type is also std::thread;
+    // *******************************************************************************
     std::thread testThread(helloWorld);
     // 1. For non-class memebr function, function name is enough;
     // 2. For class memeber function, we need & before function name;

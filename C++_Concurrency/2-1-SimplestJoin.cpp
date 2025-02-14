@@ -9,10 +9,10 @@ void helloWorld(void)
 int main(void)
 {
     std::cout << "In main(), before creating the thread.\n";
-    std::thread testThread(helloWorld); // Run thread immediately. Funtion name can't be overloaded.
+    std::thread testThread(helloWorld);
     std::cout << "In main(), after creating the thread.\n";
 
-    // join() will make main() blockingly wait for child thread to finish here.
+    // join() will make main() blocking-wait for child thread to finish here.
     testThread.join();
 
     // Below will be executed when join() finishes.
