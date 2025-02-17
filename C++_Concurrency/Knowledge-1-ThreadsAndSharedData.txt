@@ -1,5 +1,6 @@
-1. std::thread th(FunctionName) will create a new thread and run it immediately. The thread function can't be overloaded. 
-   So don't use an existing function name.
+1. std::thread th(FunctionName) will create a new thread and run it immediately. 
+   The thread function can't be overloaded. So don't use an existing function name.
+   If the FunctionName is member function of a class, we need it to be &FunctionName; otherwise, not necessary.
 
 2. std::ref() and its purpose in CodeList.txt.
 

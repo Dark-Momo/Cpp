@@ -11,7 +11,7 @@ int main(void)
     std::cout << "In main(), before creating the thread.\n";
 
     // *******************************************************************************
-    // 1. std::thread will create and run thread immediately;
+    // 1. std::thread will create and run thread IMMEDIATELY;
     // 2. Funtion name for std::thread can't be overloaded;
     // 3. If taking below as a function, std::thread's return type is also std::thread;
     // *******************************************************************************
