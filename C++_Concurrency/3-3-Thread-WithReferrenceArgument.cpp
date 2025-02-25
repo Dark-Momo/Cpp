@@ -1,6 +1,8 @@
 #include <iostream>
 #include <thread>
 
+// std::thread t(FuncNmae, std::ref(argument))
+
 // Pass by reference.
 void printString_1(std::string &str)
 {
@@ -44,10 +46,10 @@ int main(void)
     std::string str3{"Original String"};
     // ----------------------------------------------------------------------------------------
     // Below will have a lot of compilation error.
-    // 
+    // --------------------------------------------
     // std::thread testTh_3(modifyStringRef, str3);
-    //
-    // Since you can't directly use the variable name as reference for a thread, like normally
+    // --------------------------------------------
+    // because you can't directly use the variable name as reference for a thread, like normally
     // you can do to a normal function. 
     // ----------------------------------------------------------------------------------------
     std::thread testTh_3(modifyStringRef, std::ref(str3));

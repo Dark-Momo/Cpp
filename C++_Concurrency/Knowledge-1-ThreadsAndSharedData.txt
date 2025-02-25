@@ -1,8 +1,14 @@
 1. std::thread th(FunctionName) will create a new thread and run it immediately. 
    The thread function can't be overloaded. So don't use an existing function name.
-   If the FunctionName is member function of a class, we need it to be &FunctionName; otherwise, not necessary.
+   
+2. If the FunctionName is member function of a class, we need it to be &FunctionName; otherwise, not necessary.
 
-2. std::ref() and its purpose in CodeList.txt.
+3. std::thread t(FuncNmae, std::ref(argument))
+   When std::thread() calls a function with reference as argument, in std::thread(), we need to use std::ref()
+   to pass the reference. The normal case, name can also work as reference, doesn't apply for std::thread().
+
+4. When passing thread as an argument to a function, it can only be in move() form. 
+   It can't be passed by value.
 
 3. std::thread is C++ interface for multithreading, but it doesn't implement all necessary functions for multithreading 
    because we want a implementation portable to all platforms, and some platforms are limited.
