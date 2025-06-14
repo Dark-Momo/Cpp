@@ -14,19 +14,29 @@ public:
 };
 
 // Below is a test fixture class
-// 1. Test fixture should be a struct (with public access), or class with public;
+// Test fixture should be a struct (with public access), or class with public;
 class MyClassTest : public ::testing::Test
 {
 // We need public since in TEST_F() we directly use mc->
 public:
     MyClass *mc;
-    void SetUp() { mc = new MyClass(100); }
-    void TearDown() { delete mc; }
+    void SetUp() {
+        std::cout << "Class Ctor\n"; 
+        mc = new MyClass(100);
+    }
+
+    void TearDown() {
+        std::cout << "Class Dtor\n"; 
+        delete mc;
+    }
 };
+// The purpose of SetUp() is to initialize the object that you want to test, maybe filling some data.
+// For example, if you want to test a array, you can use SetUp() to initialize the array.
+// TearDown() is more like a destructor, and you may not need anything inside if it is not from nwe().
 
 // 2. TEST() -> TEST_F()
 // 3. First argument of TEST_F() is the name of Test Fixture Class name
-// 4. Each Test_F() below will have its own class construction and destruction!
+// 4. Each Test_F() below will have its OWN class construction and destruction!
 TEST_F(MyClassTest, Inc_by_5)
 {
     mc->Increment(5);
