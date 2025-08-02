@@ -1,0 +1,37 @@
+1. 自定义方法/成员函数的期望行为
+EXPECT_CALL(mock_object, method(matcher1, matcher2, ...))
+    .With(multi_argument_matcher)
+    .Times(cardinality)
+    .InSequence(sequences)
+    .After(expectations)
+    .WillOnce(action)
+    .WillRepeatedly(action)
+    .RetiresOnSaturation();
+
+An example:
+// ---------------------------------------------------------------------------
+EXPECT_CALL(mockTurtle, getX()).Times(testing::AtLeast(5)).
+                WillOnce(testing::Return(100)).WillOnce(testing::Return(150)).
+                WillRepeatedly(testing::Return(200))
+// ---------------------------------------------------------------------------
+这个期望行为的定义的意思是:
+- 调用mockTurtle的getX()方法;
+- 这个方法会至少调用5次;
+- 第1次被调用时返回100;
+- 第2次被调用时返回150;
+- 从第3次被调用开始每次都返回200;
+
+2. Matcher(匹配器)
+Matcher用于定义Mock类中的方法的形参的值(如果你的方法不需要形参时，可以保持match为空).
+::testing::_ or testing::_      :可以代表任意类型
+
+::testing::Eq(value) or value   :argument == value，method中的形参必须是value
+::testing::Ge(value)            :argument >= value，method中的形参必须大于等于value
+::testing::Gt(value)	        :argument > value
+::testing::Le(value)	        :argument <= value
+::testing::Lt(value)	        :argument < value
+::testing::Ne(value)	        :argument != value
+::testing::IsNull()	            :method的形参必须是NULL指针
+::testing::NotNull()	        :argument is a non-null pointer
+::testing::Ref(variable)	    :形参是variable的引用
+::testing::TypedEq(value)	    :形参的类型必须是type类型，而且值必须是value

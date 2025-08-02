@@ -24,6 +24,9 @@ public:
     // 3rd argument is () since the prototype of getArbitraryString() is with ();
     // If getArbitraryString(void), then 3rd argument should be (void);
     MOCK_METHOD(std::string, getArbitraryString, (), (override));
+
+    MOCK_METHOD(void, setStringValue, (std::string& strValue), (override));
+    MOCK_METHOD(void, setIntValue, (int x, int y), (override));
 };
 
 #endif

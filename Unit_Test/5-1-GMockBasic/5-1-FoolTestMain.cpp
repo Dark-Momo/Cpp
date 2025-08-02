@@ -25,12 +25,26 @@ int main(int argc, char **argv)
     MockFoolInterface mockFoolIntf;
 
     std::string value = "Hello World";
+    // Times(1)的意思是运行一次，
+    // WillOnce(Return(value))的意思是第一次运行时把value作为getArbitraryString()方法的返回值
     EXPECT_CALL(mockFoolIntf, getArbitraryString())
                 .Times(1)
                 .WillOnce(Return(value));
     
     std::string retString = mockFoolIntf.getArbitraryString();
     std::cout << "Returned string is: " << retString << std::endl;
+
+    // ------------------------------------------------------------------------
+    EXPECT_CALL(mockFoolIntf, setStringValue(::testing::_));
+    // below 2 are all correct.
+    // mockFoolIntf.setStringValue(std::ref(value));
+    mockFoolIntf.setStringValue(value);
+
+    // Will geerate error.
+    EXPECT_CALL(mockFoolIntf, setIntValue(::testing::Eq(0), ::testing::Ge(2)));
+    mockFoolIntf.setIntValue(0, 1);
+
+    return 0;
 }
 
 // 这里其实有两种写法:
