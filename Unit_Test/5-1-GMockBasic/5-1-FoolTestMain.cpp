@@ -34,15 +34,14 @@ int main(int argc, char **argv)
     std::string retString = mockFoolIntf.getArbitraryString();
     std::cout << "Returned string is: " << retString << std::endl;
 
-    // ------------------------------------------------------------------------
+    // Test argument matcher
     EXPECT_CALL(mockFoolIntf, setStringValue(::testing::_));
     // below 2 are all correct.
     // mockFoolIntf.setStringValue(std::ref(value));
     mockFoolIntf.setStringValue(value);
 
-    // Will geerate error.
     EXPECT_CALL(mockFoolIntf, setIntValue(::testing::Eq(0), ::testing::Ge(2)));
-    mockFoolIntf.setIntValue(0, 1);
+    mockFoolIntf.setIntValue(0, 1); // Error here since 2nd argument is 1, not >= 2;
 
     return 0;
 }

@@ -15,6 +15,8 @@ public:
 
     // This need to be virtual since mock class will inherit and replace its implementation
     virtual std::string getArbitraryString() = 0;
+
+    // Below 2 functions are used to test argument matcher
     virtual void setStringValue(std::string& strValue)= 0;
     virtual void setIntValue(int x, int y) = 0;
 };
