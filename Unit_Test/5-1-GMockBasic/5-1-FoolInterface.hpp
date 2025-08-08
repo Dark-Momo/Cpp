@@ -19,6 +19,9 @@ public:
     // Below 2 functions are used to test argument matcher
     virtual void setStringValue(std::string& strValue)= 0;
     virtual void setIntValue(int x, int y) = 0;
+
+    // Test to DoAll(a1, a2, …, an)	: 每次发动时执行a1到an的所有动作.
+    virtual int getParameter(std::string* name,  std::string* value) = 0;
 };
 
 #endif

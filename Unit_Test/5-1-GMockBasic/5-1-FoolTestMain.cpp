@@ -41,7 +41,18 @@ int main(int argc, char **argv)
     mockFoolIntf.setStringValue(value);
 
     EXPECT_CALL(mockFoolIntf, setIntValue(::testing::Eq(0), ::testing::Ge(2)));
-    mockFoolIntf.setIntValue(0, 1); // Error here since 2nd argument is 1, not >= 2;
+    mockFoolIntf.setIntValue(0, 2); // Error here since 2nd argument is 1, not >= 2;
+
+    // Test DoAll()
+    std::string* a = new std::string("yes");
+    std::string* b = new std::string("hello");
+    EXPECT_CALL(mockFoolIntf, getParameter(testing::_, testing::_))
+                .Times(1)
+                .WillOnce(testing::DoAll(testing::Assign(&a, b), testing::Return(1)));
+    
+    std::cout << "a = " << a << ", b = " << b << "\n";
+    int ret = mockFoolIntf.getParameter(a, b);
+    std::cout << "a = " << a << ", b = " << b << ", ret = " << ret << "\n";
 
     return 0;
 }
