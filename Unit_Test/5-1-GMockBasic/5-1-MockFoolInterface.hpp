@@ -29,6 +29,9 @@ public:
     MOCK_METHOD(void, setIntValue, (int x, int y), (override));
 
     MOCK_METHOD(int, getParameter, (std::string* name,  std::string* value), (override));
+
+    MOCK_METHOD(int, getSize, (), (override));
+    MOCK_METHOD(std::string, getValue, (), (override));
 };
 
 #endif

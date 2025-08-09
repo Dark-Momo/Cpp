@@ -22,6 +22,10 @@ public:
 
     // Test to DoAll(a1, a2, …, an)	: 每次发动时执行a1到an的所有动作.
     virtual int getParameter(std::string* name,  std::string* value) = 0;
+
+    // Test InSequence
+    virtual int getSize() = 0;
+    virtual std::string getValue() = 0;
 };
 
 #endif

@@ -13,6 +13,7 @@
 // ------------------------------------------------------------------------------------------------
 
 using ::testing::Return;
+using ::testing::Sequence;
 
 // ---------------------------------------------------------------
 // TEST(FoolInterfaceTest, Test_1)
@@ -53,6 +54,20 @@ int main(int argc, char **argv)
     std::cout << "a = " << a << ", b = " << b << "\n";
     int ret = mockFoolIntf.getParameter(a, b);
     std::cout << "a = " << a << ", b = " << b << ", ret = " << ret << "\n";
+
+    // Test InSequence
+    Sequence S1, S2;
+    EXPECT_CALL(mockFoolIntf, getSize())
+                .InSequence(S1, S2) // getSize() is first declared in S1 and S2;
+                .WillOnce(Return(1));
+
+    EXPECT_CALL(mockFoolIntf, getValue())
+                .InSequence(S1)     // getValue() is declared in S1, after getSize();
+                .WillOnce(Return(std::string("Hello World!")));
+    
+    // Error in below order
+    std::cout << "Second: " << mockFoolIntf.getValue() << std::endl;
+    std::cout << "First: " << mockFoolIntf.getSize() << std::endl;
 
     return 0;
 }
