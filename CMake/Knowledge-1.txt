@@ -1,4 +1,4 @@
-1.  If you run command 'cmake', you get:
+1.  If you just run command 'cmake'without any project, you get:
     -------------------------------------------------------
     momo@Ubuntu-Linux-22-04:~/Cpp/CMake$ cmake
     Usage
